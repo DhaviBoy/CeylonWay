@@ -7,7 +7,7 @@ import { Shield, Clock, Headphones, Star, ArrowRight, Compass, Building2 } from 
 
 import heroImage from "@/assets/hero-beach.jpg";
 import sigiriya from "@/assets/BW4YPnXzX3u1.jpg";
-import mirissa from "@/assets/coconut-tree-hill-2.jpg";
+import galle from "@/assets/galle-fort-1050x700-1.jpg";
 import ella from "@/assets/Ella42.jpg";
 import kandy from "@/assets/Kandy.jpg";
 import villaLuxury from "@/assets/villa-luxury.jpg";
@@ -25,13 +25,13 @@ const featuredDestinations = [
     category: "Cultural Heritage",
   },
   {
-    id: "mirissa",
-    name: "Mirissa",
+    id: "galle",
+    name: "Galle",
     country: "Sri Lanka",
-    image: mirissa,
+    image: galle,
     rating: 4.8,
     propertyCount: 120,
-    category: "Beach Paradise",
+    category: "Beach & Historical",
   },
   {
     id: "ella",

@@ -10,8 +10,9 @@ import sigiriya from "@/assets/BW4YPnXzX3u1.jpg";
 import mirissa from "@/assets/coconut-tree-hill-2.jpg";
 import ella from "@/assets/Ella42.jpg";
 import kandy from "@/assets/Kandy.jpg";
-import hotelBoutique from "@/assets/hotel-boutique.jpg";
-import villaLuxury from "@/assets/villa-luxury.jpg";
+import galle from "@/assets/galle-fort-1050x700-1.jpg";
+import jaffna from "@/assets/LK61120100-03-E-1280-720.jpg";
+import polonnaruwa from "@/assets/f991ffa5d12203de2fa6e201392b017b.jpg";
 
 const categories = [
   { id: "all", label: "All", icon: Grid },
@@ -67,10 +68,21 @@ const allDestinations = [
     lng: 80.6366,
   },
   {
+    id: "galle",
+    name: "Galle",
+    country: "Sri Lanka",
+    image: galle,
+    rating: 4.8,
+    propertyCount: 110,
+    category: "Beach & Historical",
+    lat: 6.0535,
+    lng: 80.2197,
+  },
+  {
     id: "jaffna",
     name: "Jaffna",
     country: "Sri Lanka",
-    image: hotelBoutique,
+    image: jaffna,
     rating: 4.6,
     propertyCount: 65,
     category: "Beach & Cultural",
@@ -81,7 +93,7 @@ const allDestinations = [
     id: "polonnaruwa",
     name: "Polonnaruwa",
     country: "Sri Lanka",
-    image: villaLuxury,
+    image: polonnaruwa,
     rating: 4.8,
     propertyCount: 72,
     category: "Cultural Heritage",
