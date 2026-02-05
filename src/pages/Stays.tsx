@@ -10,6 +10,7 @@ import hotelBoutique from "@/assets/hotel-boutique.jpg";
 import villaOverwater from "@/assets/villa-overwater.jpg";
 import destinationBali from "@/assets/destination-bali.jpg";
 import destinationSantorini from "@/assets/destination-santorini.jpg";
+import hotels from "@/assets/98-Acres-Resort--Spa-to-spearhead-luxury-tourism-to-Sri-Lanka-via-recent-award-Top-20-Best-Romantic-Hotels-in-Asia-2022.jpg";
 import { SearchBar } from "@/components/search/SearchBar";
 
 const propertyTypes = [
@@ -126,13 +127,17 @@ export default function Stays() {
   return (
     <Layout>
       {/* Header */}
-      <section className="bg-ocean py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section 
+        className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${hotels})` }}
+      >
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-5xl font-bold text-accent-foreground mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
               Hotels & Villas
             </h1>
-            <p className="text-accent-foreground/90 text-lg max-w-2xl mx-auto">
+            <p className="text-white/90 text-lg max-w-2xl mx-auto">
               Find your perfect stay from our curated collection of luxury hotels and private villas.
             </p>
           </div>

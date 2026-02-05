@@ -13,6 +13,7 @@ import kandy from "@/assets/Kandy.jpg";
 import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
 import villaOverwater from "@/assets/villa-overwater.jpg";
+import tourism from "@/assets/TAL-header-surfing-hiriketiya-sri-lanka-SURFSRILANKA0225-d53a7360601d415bbf9dfa1bd52a17bc.jpg";
 
 const featuredDestinations = [
   {
@@ -123,7 +124,7 @@ export default function Index() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden w-screen -mx-[calc((100vw-100%)/2)]">
         {/* Background Video */}
         <div className="absolute inset-0 overflow-hidden">
           <video
@@ -147,7 +148,7 @@ export default function Index() {
         </div>
 
         {/* Content */}
-        <div className="container relative z-10 mx-auto px-4 py-20">
+        <div className="container relative z-10 mx-auto px-4 py-10 w-full">
           <div className="max-w-3xl">
             <span className="inline-block px-4 py-2 rounded-full bg-card/20 backdrop-blur-sm text-card text-sm font-medium mb-6 animate-fade-up">
               ✨ Discover the Pearl of the Indian Ocean
@@ -163,7 +164,7 @@ export default function Index() {
           </div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl animate-fade-up" style={{ animationDelay: "0.3s" }}>
             {stats.map((stat) => (
               <div key={stat.label} className="text-center md:text-left">
                 <div className="text-3xl md:text-4xl font-bold text-card">{stat.value}</div>
@@ -175,9 +176,9 @@ export default function Index() {
       </section>
 
       {/* Featured Destinations */}
-      <section className="py-20 md:py-28 bg-background">
+      <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div>
               <div className="flex items-center gap-2 text-primary mb-2">
                 <Compass className="w-5 h-5" />
@@ -212,9 +213,9 @@ export default function Index() {
       </section>
 
       {/* Popular Properties */}
-      <section className="py-20 md:py-28 bg-secondary/30">
+      <section className="py-12 md:py-16 bg-secondary/30">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
             <div>
               <div className="flex items-center gap-2 text-primary mb-2">
                 <Building2 className="w-5 h-5" />
@@ -249,9 +250,9 @@ export default function Index() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 md:py-28 bg-background">
+      <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Why Choose Wanderlust?
             </h2>
@@ -283,7 +284,8 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 md:py-28 bg-gradient-coral">
+      <section className="py-32 md:py-48 relative bg-cover bg-center bg-no-repeat w-screen -mx-[calc((100vw-100%)/2)] mb-0"style={{ backgroundImage: `url(${tourism})` }}>
+        
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6">
             Ready to Explore Sri Lanka?
