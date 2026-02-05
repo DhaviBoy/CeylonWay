@@ -13,7 +13,7 @@ import kandy from "@/assets/Kandy.jpg";
 import galle from "@/assets/galle-fort-1050x700-1.jpg";
 import jaffna from "@/assets/LK61120100-03-E-1280-720.jpg";
 import polonnaruwa from "@/assets/f991ffa5d12203de2fa6e201392b017b.jpg";
-
+import hotels from "@/assets/home-banner-frame-1_531b0a49e14ce11ce2833cb243642c1b.jpg";
 const categories = [
   { id: "all", label: "All", icon: Grid },
   { id: "beach", label: "Beach", icon: MapPin },
@@ -118,13 +118,17 @@ export default function Destinations() {
   return (
     <Layout>
       {/* Header */}
-      <section className="bg-gradient-coral py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section 
+              className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${hotels})` }}
+            >
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
-            <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
               Explore Sri Lanka
             </h1>
-            <p className="text-primary-foreground/90 text-lg max-w-2xl mx-auto">
+            <p className="text-white text-lg max-w-2xl mx-auto">
               Discover the beauty of Sri Lanka - from ancient cultural sites to pristine beaches and misty mountains.
             </p>
           </div>
@@ -132,7 +136,7 @@ export default function Destinations() {
       </section>
 
       {/* Filters & Search */}
-      <section className="py-8 border-b border-border sticky top-16 md:top-20 bg-background z-30">
+      <section className="py-8 border-b border-border bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 justify-between">
             {/* Search */}

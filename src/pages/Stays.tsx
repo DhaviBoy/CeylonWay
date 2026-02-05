@@ -148,7 +148,7 @@ export default function Stays() {
       </section>
 
       {/* Filters Bar */}
-      <section className="py-6 border-b border-border sticky top-16 md:top-20 bg-background z-30">
+      <section className="py-6 border-b border-border bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 justify-between">
             {/* Type Tabs */}
