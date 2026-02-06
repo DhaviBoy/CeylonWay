@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 
@@ -7,6 +8,12 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <div className="w-full h-full flex flex-col">
       <Navbar />

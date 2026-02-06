@@ -294,12 +294,12 @@ export default function Index() {
             Join thousands of travelers who've discovered the beauty of Sri Lanka with CeylonWay.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="hero" size="xl" asChild>
+            <Button size="xl" asChild>
               <Link to="/destinations">
                 Explore Destinations
               </Link>
             </Button>
-            <Button variant="hero-outline" size="xl" asChild>
+            <Button variant="outline" size="xl" asChild>
               <Link to="/register">
                 Create Account
               </Link>
