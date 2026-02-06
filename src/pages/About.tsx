@@ -4,6 +4,7 @@ import { Globe, Heart, Award, Users, TrendingUp, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import heroBg from "@/assets/hero-beach.jpg";
+import tourism from "@/assets/TAL-header-surfing-hiriketiya-sri-lanka-SURFSRILANKA0225-d53a7360601d415bbf9dfa1bd52a17bc.jpg";
 
 const stats = [
   { value: "50K+", label: "Happy Travelers" },
@@ -17,15 +18,15 @@ const values = [
     icon: Globe,
     title: "Global Excellence",
     description: "Connecting travelers worldwide with the best destinations and accommodations in Sri Lanka.",
-    bgColor: "bg-blue-50",
-    iconBg: "bg-blue-500",
+    bgColor: "bg-amber-50",
+    iconBg: "bg-amber-500",
   },
   {
     icon: Heart,
     title: "Passion for Travel",
     description: "We believe travel transforms lives. Every journey should be memorable and seamless.",
-    bgColor: "bg-rose-50",
-    iconBg: "bg-rose-500",
+    bgColor: "bg-amber-50",
+    iconBg: "bg-amber-500",
   },
   {
     icon: Award,
@@ -38,8 +39,8 @@ const values = [
     icon: Users,
     title: "Customer First",
     description: "Your satisfaction is our priority. 24/7 support team ready to assist you anytime.",
-    bgColor: "bg-teal-50",
-    iconBg: "bg-teal-500",
+    bgColor: "bg-amber-50",
+    iconBg: "bg-amber-500",
   },
 ];
 
@@ -49,10 +50,11 @@ export default function About() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section
-        className="py-28 md:py-30 relative bg-cover bg-center bg-no-repeat w-screen -mx-[calc((100vw-100%)/2)]"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
+      <section className="py-28 md:py-30 relative overflow-hidden w-screen -mx-[calc((100vw-100%)/2)]">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-zoom-in"
+          style={{ backgroundImage: `url(${heroBg})` }}
+        ></div>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center max-w-3xl mx-auto">
@@ -139,8 +141,8 @@ export default function About() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl bg-orange-50 shadow-card hover:shadow-card-hover transition-all duration-300 animate-fade-up" style={{ animationDelay: "0s" }}>
-              <Award className="w-12 h-12 text-orange-500 mb-4" />
+            <div className="p-8 rounded-2xl bg-blue-50 shadow-card hover:shadow-card-hover transition-all duration-300 animate-fade-up" style={{ animationDelay: "0s" }}>
+              <Award className="w-12 h-12 text-blue-500 mb-4" />
               <h3 className="text-xl font-bold text-foreground mb-3">
                 Verified Properties
               </h3>
@@ -149,8 +151,8 @@ export default function About() {
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl bg-green-50 shadow-card hover:shadow-card-hover transition-all duration-300 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-              <TrendingUp className="w-12 h-12 text-green-500 mb-4" />
+            <div className="p-8 rounded-2xl bg-blue-50 shadow-card hover:shadow-card-hover transition-all duration-300 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+              <TrendingUp className="w-12 h-12 text-blue-500 mb-4" />
               <h3 className="text-xl font-bold text-foreground mb-3">
                 Best Value
               </h3>
@@ -173,14 +175,17 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 md:py-16 bg-primary/10">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Ready to Explore Sri Lanka?
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            Join thousands of travelers who've discovered the magic of Sri Lanka with CeylonWay.
-          </p>
+      <section className="py-32 md:py-40 relative bg-cover bg-center bg-no-repeat w-screen -mx-[calc((100vw-100%)/2)] mb-0" style={{ backgroundImage: `url(${tourism})` }}>
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Explore Sri Lanka?
+            </h2>
+            <p className="text-white text-lg max-w-2xl mx-auto mb-8">
+              Join thousands of travelers who've discovered the magic of Sri Lanka with CeylonWay.
+            </p>
+          </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="xl" asChild>
               <Link to="/destinations">
