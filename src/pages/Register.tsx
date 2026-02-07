@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import "./Login.css";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -34,8 +35,15 @@ export default function Register() {
 
   return (
     <Layout>
-      <div className="min-h-[80vh] flex items-center justify-center py-16 px-4">
-        <div className="w-full max-w-md">
+      <div className="login-page-container py-16 px-4">
+        <div className="login-bg-animation">
+          <div className="vector-grid"></div>
+          <div className="graphic-item graphic-item-1"></div>
+          <div className="graphic-item graphic-item-2"></div>
+          <div className="graphic-item graphic-item-3"></div>
+          <div className="graphic-item graphic-item-4"></div>
+        </div>
+        <div className="w-full max-w-md relative z-10">
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-2xl bg-gradient-coral flex items-center justify-center mx-auto mb-4">
