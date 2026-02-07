@@ -158,7 +158,7 @@ export default function Index() {
               <span className="text-gradient-coral">Your Way</span>
             </h1>
             <p className="text-lg md:text-xl text-card/90 mb-10 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-              Discover ancient temples, pristine beaches, lush tea plantations, 
+              Discover ancient temples, pristine beaches, lush tea plantations,
               and book trusted accommodations across Sri Lanka with CeylonWay.
             </p>
           </div>
@@ -284,7 +284,7 @@ export default function Index() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 md:py-48 relative bg-cover bg-center bg-no-repeat w-screen -mx-[calc((100vw-100%)/2)] mb-0"style={{ backgroundImage: `url(${tourism})` }}>
+      <section className="py-32 md:py-48 relative bg-cover bg-center bg-no-repeat w-screen -mx-[calc((100vw-100%)/2)] mb-0" style={{ backgroundImage: `url(${tourism})` }}>
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6">

@@ -46,11 +46,11 @@ export default function Register() {
         <div className="w-full max-w-md relative z-10">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-coral flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-coral flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Globe className="w-8 h-8 text-primary-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground mb-2">Create Your Account</h1>
-            <p className="text-muted-foreground">Start your journey with Wanderlust</p>
+            <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">Create Your Account</h1>
+            <p className="text-gray-100 drop-shadow-md text-lg">Start your journey with Wanderlust</p>
           </div>
 
           {/* Form */}
