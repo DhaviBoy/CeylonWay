@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { registerUser } from "@/lib/api";
 import "./Login.css";
 
 export default function Register() {
@@ -21,16 +22,26 @@ export default function Register() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate registration
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Call backend API to register
+      const response = await registerUser(name, email, password);
 
-    toast({
-      title: "Welcome to Wanderlust!",
-      description: "Your account has been created successfully.",
-    });
+      toast({
+        title: "Welcome to Ceylonway!",
+        description: "Your account has been created successfully.",
+      });
 
-    setIsLoading(false);
-    navigate("/dashboard");
+      // Navigate to dashboard with user data
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Registration Failed",
+        description: error instanceof Error ? error.message : "An error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { 
@@ -11,8 +12,10 @@ import {
   Clock,
   ChevronRight
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { getCurrentUser, logoutUser } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
@@ -46,7 +49,84 @@ const upcomingBookings = [
   },
 ];
 
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+}
+
 export default function Dashboard() {
+  const [user, setUser] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Fetch current user data from backend
+    const fetchUser = async () => {
+      try {
+        const userData = await getCurrentUser();
+        setUser(userData);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to load user data. Please log in again.",
+          variant: "destructive",
+        });
+        navigate("/login");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [navigate, toast]);
+
+  const handleLogout = () => {
+    logoutUser();
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+    navigate("/");
+  };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading your profile...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-destructive mb-4">Failed to load user data</p>
+            <Button asChild>
+              <Link to="/login">Go to Login</Link>
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  // Format the date to show when user joined
+  const memberSinceDate = new Date(user.createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long'
+  });
+
   return (
     <Layout>
       <div className="bg-secondary/30 min-h-screen py-8 md:py-12">
@@ -60,9 +140,9 @@ export default function Dashboard() {
                   <div className="w-20 h-20 rounded-full bg-gradient-coral flex items-center justify-center mx-auto mb-4">
                     <User className="w-10 h-10 text-primary-foreground" />
                   </div>
-                  <h2 className="text-xl font-bold text-foreground">John Doe</h2>
-                  <p className="text-muted-foreground text-sm">john@example.com</p>
-                  <p className="text-xs text-muted-foreground mt-2">Member since January 2025</p>
+                  <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
+                  <p className="text-muted-foreground text-sm">{user.email}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Member since {memberSinceDate}</p>
                 </div>
 
                 {/* Navigation */}
@@ -85,7 +165,10 @@ export default function Dashboard() {
                 </nav>
 
                 <div className="mt-6 pt-6 border-t border-border">
-                  <button className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 w-full transition-colors">
+                  <button 
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 w-full transition-colors"
+                  >
                     <LogOut className="w-5 h-5" />
                     Sign Out
                   </button>
@@ -97,7 +180,7 @@ export default function Dashboard() {
             <div className="lg:col-span-3 space-y-8">
               {/* Welcome */}
               <div className="bg-gradient-coral rounded-2xl p-6 md:p-8 text-primary-foreground">
-                <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, John! 👋</h1>
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, {user.name}! 👋</h1>
                 <p className="text-primary-foreground/90">
                   Ready for your next adventure? You have 2 upcoming trips.
                 </p>

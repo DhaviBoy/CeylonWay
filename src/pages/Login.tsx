@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { loginUser } from "@/lib/api";
 import "./Login.css";
 
 export default function Login() {
@@ -20,16 +21,25 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // Call backend API to login
+      await loginUser(email, password);
 
-    toast({
-      title: "Welcome back!",
-      description: "You've successfully signed in.",
-    });
+      toast({
+        title: "Welcome back!",
+        description: "You've successfully signed in.",
+      });
 
-    setIsLoading(false);
-    navigate("/dashboard");
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: error instanceof Error ? error.message : "An error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
