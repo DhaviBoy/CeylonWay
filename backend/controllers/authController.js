@@ -56,10 +56,30 @@ exports.register = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Register error:', error);
+    console.error('Register error:', error.message);
+    
+    // Check for MongoDB validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        errors: messages
+      });
+    }
+    
+    // Check for duplicate email error
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists'
+      });
+    }
+    
     res.status(500).json({
       success: false,
-      message: 'Server error during registration'
+      message: 'Server error during registration',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

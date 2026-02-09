@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { Menu, X, User, MapPin, Building2, Globe, Compass, Sparkles, Home } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, User, MapPin, Building2, Globe, Compass, Sparkles, Home, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { logoutUser } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
-const navLinks = [
+const guestNavLinks = [
   { 
     name: "Home", 
     href: "/", 
@@ -31,9 +33,56 @@ const navLinks = [
   },
 ];
 
+const userNavLinks = [
+  { 
+    name: "Dashboard", 
+    href: "/dashboard", 
+    icon: Home,
+    description: "Your dashboard"
+  },
+  { 
+    name: "Destinations", 
+    href: "/destinations", 
+    icon: MapPin,
+    description: "Explore amazing places"
+  },
+  { 
+    name: "Hotels & Villas", 
+    href: "/stays", 
+    icon: Building2,
+    description: "Find your perfect stay"
+  },
+  { 
+    name: "About", 
+    href: "/about", 
+    icon: Compass,
+    description: "Our story"
+  },
+];
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token);
+  }, [location]);
+
+  const handleLogout = () => {
+    logoutUser();
+    setIsLoggedIn(false);
+    setIsOpen(false);
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+  };
+
+  const navLinks = isLoggedIn ? userNavLinks : guestNavLinks;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white/95 via-coral/5 to-ocean/5 backdrop-blur-xl border-b border-coral/20 shadow-lg shadow-coral/5">
@@ -84,15 +133,24 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/login">
-                <User className="w-4 h-4" />
-                Sign In
-              </Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/register">Get Started</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button variant="destructive" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">
+                    <User className="w-4 h-4" />
+                    Sign In
+                  </Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/register">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -131,16 +189,25 @@ export function Navbar() {
               </Link>
             ))}
             <div className="pt-3 border-t border-border space-y-2">
-              <Button variant="outline" className="w-full" asChild>
-                <Link to="/login" onClick={() => setIsOpen(false)}>
-                  Sign In
-                </Link>
-              </Button>
-              <Button className="w-full" asChild>
-                <Link to="/register" onClick={() => setIsOpen(false)}>
-                  Get Started
-                </Link>
-              </Button>
+              {isLoggedIn ? (
+                <Button variant="destructive" className="w-full" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link to="/login" onClick={() => setIsOpen(false)}>
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button className="w-full" asChild>
+                    <Link to="/register" onClick={() => setIsOpen(false)}>
+                      Get Started
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
