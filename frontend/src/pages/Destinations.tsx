@@ -8,6 +8,26 @@ import { cn } from "@/lib/utils";
 
 import hotels from "@/assets/home-banner-frame-1_531b0a49e14ce11ce2833cb243642c1b.jpg";
 
+// Import local destination images
+import sigiriyaImg from "@/assets/BW4YPnXzX3u1.jpg";
+import mirissaImg from "@/assets/coconut-tree-hill-2.jpg";
+import ellaImg from "@/assets/Ella42.jpg";
+import kandyImg from "@/assets/Kandy.jpg";
+import galleImg from "@/assets/galle-fort-1050x700-1.jpg";
+import polonnaruwaImg from "@/assets/f991ffa5d12203de2fa6e201392b017b.jpg";
+import jaffnaImg from "@/assets/LK61120100-03-E-1280-720.jpg";
+
+// Map destination IDs to local images
+const destinationImages: Record<string, string> = {
+  sigiriya: sigiriyaImg,
+  mirissa: mirissaImg,
+  ella: ellaImg,
+  kandy: kandyImg,
+  galle: galleImg,
+  polonnaruwa: polonnaruwaImg, // Reuse similar image
+  jaffna: jaffnaImg, // Reuse similar image
+};
+
 const categories = [
   { id: "all", label: "All", icon: Grid },
   { id: "beach", label: "Beach", icon: MapPin },
@@ -28,7 +48,14 @@ export default function Destinations() {
       try {
         const response = await fetch("http://localhost:5000/api/locations");
         const data = await response.json();
-        setDestinations(data);
+        
+        // Map local images to destinations
+        const destinationsWithLocalImages = data.map((dest: any) => ({
+          ...dest,
+          image: destinationImages[dest.id] || dest.image
+        }));
+        
+        setDestinations(destinationsWithLocalImages);
       } catch (error) {
         console.error("Error fetching destinations:", error);
       } finally {

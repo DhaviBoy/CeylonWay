@@ -19,9 +19,26 @@ import {
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
+// Import local destination images
+import sigiriyaImg from "@/assets/BW4YPnXzX3u1.jpg";
+import mirissaImg from "@/assets/coconut-tree-hill-2.jpg";
+import ellaImg from "@/assets/Ella42.jpg";
+import kandyImg from "@/assets/Kandy.jpg";
+import galleImg from "@/assets/galle-fort-1050x700-1.jpg";
 import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
 import villaOverwater from "@/assets/villa-overwater.jpg";
+
+// Map destination IDs to local images
+const destinationImages: Record<string, string> = {
+  sigiriya: sigiriyaImg,
+  mirissa: mirissaImg,
+  ella: ellaImg,
+  kandy: kandyImg,
+  galle: galleImg,
+  polonnaruwa: sigiriyaImg, // Reuse similar image
+  jaffna: galleImg, // Reuse similar image
+};
 
 // Mock properties data (will be replaced with API call later)
 function getPropertiesByDestination(destinationId: string) {
@@ -238,7 +255,7 @@ export default function DestinationDetails() {
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px]">
         <img
-          src={destination.image}
+          src={destinationImages[id] || destination.image}
           alt={destination.name}
           className="w-full h-full object-cover"
         />
