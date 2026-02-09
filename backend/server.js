@@ -24,11 +24,12 @@ app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api', require('./routes/dataRoutes'));
 
 // Health check route
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+  res.json({
+    status: 'OK',
     message: 'Ceylonway API is running',
     timestamp: new Date().toISOString()
   });

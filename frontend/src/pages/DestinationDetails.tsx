@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { PropertyCard } from "@/components/cards/PropertyCard";
@@ -11,106 +12,19 @@ import {
   Building2,
   ChevronLeft,
   Star,
-  Heart
+  Heart,
+  Loader2,
+  Navigation
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
-import sigiriya from "@/assets/BW4YPnXzX3u1.jpg";
-import mirissa from "@/assets/coconut-tree-hill-2.jpg";
-import ella from "@/assets/Ella42.jpg";
-import kandy from "@/assets/Kandy.jpg";
 import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
 import villaOverwater from "@/assets/villa-overwater.jpg";
 
-const destinationData: Record<string, any> = {
-  sigiriya: {
-    name: "Sigiriya",
-    country: "Sri Lanka",
-    description: "Sigiriya, the ancient fortress and UNESCO World Heritage Site, is one of Sri Lanka's most iconic destinations. Perched atop a 200-meter rock, this archaeological marvel offers breathtaking views, ancient gardens, and a fascinating glimpse into Sri Lanka's rich cultural heritage.",
-    image: sigiriya,
-    rating: 4.9,
-    reviewCount: 1850,
-    bestTime: "November to April (dry season)",
-    tips: [
-      "Start climbing early in the morning to avoid crowds",
-      "Bring plenty of water and wear comfortable hiking shoes",
-      "Don't miss the ancient frescoes and mirror walls",
-      "The views from the top are spectacular in clear weather",
-    ],
-    attractions: [
-      "Ancient Rock Fortress",
-      "Sigiriya Frescoes",
-      "Royal Gardens",
-      "Pigeon Rock",
-    ],
-  },
-  mirissa: {
-    name: "Mirissa",
-    country: "Sri Lanka",
-    description: "Mirissa is a charming beach town on Sri Lanka's southern coast, known for its pristine sandy beaches, vibrant coral reefs, and excellent whale watching opportunities. Perfect for relaxation, water sports, and experiencing authentic coastal Sri Lankan culture.",
-    image: mirissa,
-    rating: 4.8,
-    reviewCount: 2100,
-    bestTime: "November to April (dry season)",
-    tips: [
-      "Go whale watching between November and April for best sightings",
-      "Explore the vibrant night markets for local cuisine",
-      "The best sunsets are from the beach bars",
-      "Snorkeling and diving spots are nearby",
-    ],
-    attractions: [
-      "Mirissa Beach",
-      "Whale Watching Cruises",
-      "Coral Reefs",
-      "Matara Fort",
-    ],
-  },
-  ella: {
-    name: "Ella",
-    country: "Sri Lanka",
-    description: "Ella is a picturesque mountain village nestled in the misty highlands of Sri Lanka. Famous for its stunning views, tea plantations, and adventure activities, Ella offers a perfect blend of natural beauty and tranquility for travelers seeking to escape the hustle and bustle.",
-    image: ella,
-    rating: 4.9,
-    reviewCount: 2250,
-    bestTime: "December to March (dry season)",
-    tips: [
-      "Don't miss the Nine Arch Bridge - a architectural marvel",
-      "Visit tea plantations and enjoy fresh tea with mountain views",
-      "The train journey to Ella is scenic and worth experiencing",
-      "Hike to Little Adam's Peak for panoramic views",
-    ],
-    attractions: [
-      "Nine Arch Bridge",
-      "Tea Plantations",
-      "Little Adam's Peak",
-      "Ravana Falls",
-    ],
-  },
-  kandy: {
-    name: "Kandy",
-    country: "Sri Lanka",
-    description: "Kandy, the cultural heart of Sri Lanka, is a UNESCO World Heritage Site famous for the sacred Temple of the Tooth and its stunning location on a hill surrounded by lush greenery. The city is rich in history, art, and spiritual significance.",
-    image: kandy,
-    rating: 4.7,
-    reviewCount: 2700,
-    bestTime: "December to February (dry season)",
-    tips: [
-      "Visit the Temple of the Tooth during the evening ceremony",
-      "The Kandy Lake offers beautiful walks and photo opportunities",
-      "Explore the Royal Botanic Gardens in nearby Peradeniya",
-      "Try local cuisine at the Central Market",
-    ],
-    attractions: [
-      "Temple of the Tooth",
-      "Kandy Lake",
-      "Royal Botanic Gardens",
-      "National Museum",
-    ],
-  },
-};
-
-const getPropertiesByDestination = (destinationId: string) => {
+// Mock properties data (will be replaced with API call later)
+function getPropertiesByDestination(destinationId: string) {
   const properties: Record<string, any[]> = {
     sigiriya: [
       {
@@ -255,12 +169,69 @@ const getPropertiesByDestination = (destinationId: string) => {
   };
 
   return properties[destinationId] || [];
-};
+}
 
 export default function DestinationDetails() {
-  const { id = "sigiriya" } = useParams<{ id: string }>();
-  const destination = destinationData[id] || destinationData.sigiriya;
-  const nearbyProperties = getPropertiesByDestination(id || "sigiriya");
+  const { id = "galle" } = useParams<{ id: string }>();
+  const [destination, setDestination] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const nearbyProperties = getPropertiesByDestination(id || "galle");
+
+  useEffect(() => {
+    const fetchDestinationDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:5000/api/locations/${id}`);
+        
+        if (!response.ok) {
+          throw new Error('Destination not found');
+        }
+        
+        const data = await response.json();
+        setDestination(data);
+      } catch (error: any) {
+        console.error("Error fetching destination:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load destination details. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinationDetails();
+  }, [id, toast]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading destination details...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!destination) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="text-center">
+            <p className="text-xl text-muted-foreground mb-4">Destination not found</p>
+            <Button asChild>
+              <Link to="/destinations">Back to Destinations</Link>
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -320,58 +291,100 @@ export default function DestinationDetails() {
                   <Info className="w-6 h-6 text-primary" />
                   Overview
                 </h2>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed mb-4">
                   {destination.description}
                 </p>
+                {destination.longDescription && (
+                  <p className="text-muted-foreground leading-relaxed">
+                    {destination.longDescription}
+                  </p>
+                )}
               </div>
 
               {/* Best Time to Visit */}
-              <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <Sun className="w-6 h-6 text-golden" />
-                  Best Time to Visit
-                </h2>
-                <p className="text-muted-foreground">{destination.bestTime}</p>
-              </div>
+              {destination.bestTimeToVisit && (
+                <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                    <Sun className="w-6 h-6 text-golden" />
+                    Best Time to Visit
+                  </h2>
+                  <p className="text-muted-foreground">{destination.bestTimeToVisit}</p>
+                </div>
+              )}
+
+              {/* Getting There */}
+              {destination.gettingThere && (
+                <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                    <Navigation className="w-6 h-6 text-ocean" />
+                    Getting There
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed">{destination.gettingThere}</p>
+                </div>
+              )}
 
               {/* Travel Tips */}
-              <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <Plane className="w-6 h-6 text-ocean" />
-                  Travel Tips for Visitors
-                </h2>
-                <ul className="space-y-3">
-                  {destination.tips.map((tip, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
-                        {index + 1}
-                      </span>
-                      <span className="text-muted-foreground">{tip}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {destination.tips && destination.tips.length > 0 && (
+                <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                    <Plane className="w-6 h-6 text-ocean" />
+                    Travel Tips for Visitors
+                  </h2>
+                  <ul className="space-y-3">
+                    {destination.tips.map((tip: string, index: number) => (
+                      <li key={index} className="flex items-start gap-3">
+                        <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+                          {index + 1}
+                        </span>
+                        <span className="text-muted-foreground leading-relaxed">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Attractions */}
-              <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <MapPin className="w-6 h-6 text-primary" />
-                  Top Attractions
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {destination.attractions.map((attraction, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-4 rounded-xl bg-secondary/50"
-                    >
-                      <span className="w-10 h-10 rounded-lg bg-gradient-coral flex items-center justify-center text-primary-foreground font-bold">
-                        {index + 1}
-                      </span>
-                      <span className="font-medium text-foreground">{attraction}</span>
-                    </div>
-                  ))}
+              {destination.attractions && destination.attractions.length > 0 && (
+                <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
+                    <MapPin className="w-6 h-6 text-primary" />
+                    Top Attractions
+                  </h2>
+                  <div className="grid grid-cols-1 gap-3">
+                    {destination.attractions.map((attraction: string, index: number) => (
+                      <div
+                        key={index}
+                        className="flex items-start gap-3 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+                      >
+                        <span className="w-8 h-8 rounded-lg bg-gradient-coral flex items-center justify-center text-primary-foreground font-bold shrink-0">
+                          {index + 1}
+                        </span>
+                        <span className="font-medium text-foreground leading-relaxed">{attraction}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Activities */}
+              {destination.activities && destination.activities.length > 0 && (
+                <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4">
+                    Things to Do
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {destination.activities.map((activity: string, index: number) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary transition-colors"
+                      >
+                        <span className="text-primary">•</span>
+                        <span className="text-foreground">{activity}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}
@@ -379,24 +392,46 @@ export default function DestinationDetails() {
               {/* Quick Info Card */}
               <div className="bg-card rounded-2xl shadow-card p-6 sticky top-24">
                 <h3 className="text-lg font-bold text-foreground mb-4">Plan Your Visit</h3>
-                <Button className="w-full mb-4" size="lg">
-                  <Calendar className="w-5 h-5" />
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Category</span>
+                    <span className="font-medium text-foreground">{destination.category}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Rating</span>
+                    <span className="font-medium text-foreground flex items-center gap-1">
+                      <Star className="w-4 h-4 fill-golden text-golden" />
+                      {destination.rating}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Accommodations</span>
+                    <span className="font-medium text-foreground">{destination.propertyCount}+</span>
+                  </div>
+                </div>
+                <Button className="w-full mb-3" size="lg">
+                  <Calendar className="w-5 h-5 mr-2" />
                   Check Availability
                 </Button>
                 <Button variant="outline" className="w-full" size="lg">
-                  <Building2 className="w-5 h-5" />
+                  <Building2 className="w-5 h-5 mr-2" />
                   View All Stays
                 </Button>
               </div>
 
-              {/* Map Placeholder */}
+              {/* Map Preview */}
               <div className="bg-card rounded-2xl shadow-card p-6">
                 <h3 className="text-lg font-bold text-foreground mb-4">Location</h3>
-                <div className="aspect-square rounded-xl bg-secondary flex items-center justify-center">
+                <div className="aspect-square rounded-xl bg-secondary flex items-center justify-center mb-4">
                   <div className="text-center">
                     <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">Interactive map coming soon</p>
                   </div>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <p className="font-semibold text-foreground mb-1">Coordinates:</p>
+                  <p>Latitude: {destination.lat}</p>
+                  <p>Longitude: {destination.lng}</p>
                 </div>
               </div>
             </div>
@@ -405,19 +440,21 @@ export default function DestinationDetails() {
       </section>
 
       {/* Nearby Properties */}
-      <section className="py-12 md:py-16 bg-secondary/30">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 flex items-center gap-2">
-            <Building2 className="w-7 h-7 text-primary" />
-            Nearby Hotels & Villas
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {nearbyProperties.map((property) => (
-              <PropertyCard key={property.id} {...property} />
-            ))}
+      {nearbyProperties.length > 0 && (
+        <section className="py-12 md:py-16 bg-secondary/30">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8 flex items-center gap-2">
+              <Building2 className="w-7 h-7 text-primary" />
+              Nearby Hotels & Villas
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {nearbyProperties.map((property) => (
+                <PropertyCard key={property.id} {...property} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </Layout>
   );
 }

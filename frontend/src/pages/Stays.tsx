@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import villaLuxury from "@/assets/villa-luxury.jpg";
-import hotelBoutique from "@/assets/hotel-boutique.jpg";
-import villaOverwater from "@/assets/villa-overwater.jpg";
-import destinationBali from "@/assets/destination-bali.jpg";
-import destinationSantorini from "@/assets/destination-santorini.jpg";
 import hotels from "@/assets/98-Acres-Resort--Spa-to-spearhead-luxury-tourism-to-Sri-Lanka-via-recent-award-Top-20-Best-Romantic-Hotels-in-Asia-2022.jpg";
 import { SearchBar } from "@/components/search/SearchBar";
 
@@ -33,82 +28,31 @@ const sortOptions = [
   { id: "rating", label: "Highest Rated" },
 ];
 
-const allProperties = [
-  {
-    id: "ocean-villa-1",
-    name: "Oceanfront Luxury Villa",
-    location: "Maldives",
-    image: villaLuxury,
-    price: 450,
-    rating: 4.9,
-    reviewCount: 128,
-    type: "villa" as const,
-    amenities: ["wifi", "pool", "parking"],
-  },
-  {
-    id: "boutique-hotel-1",
-    name: "Seaside Boutique Hotel",
-    location: "Bali, Indonesia",
-    image: hotelBoutique,
-    price: 180,
-    rating: 4.7,
-    reviewCount: 256,
-    type: "hotel" as const,
-    amenities: ["wifi", "pool", "parking"],
-  },
-  {
-    id: "overwater-villa-1",
-    name: "Overwater Paradise Bungalow",
-    location: "Maldives",
-    image: villaOverwater,
-    price: 680,
-    rating: 4.9,
-    reviewCount: 89,
-    type: "villa" as const,
-    amenities: ["wifi", "pool"],
-  },
-  {
-    id: "rice-terrace-retreat",
-    name: "Rice Terrace Retreat",
-    location: "Ubud, Bali",
-    image: destinationBali,
-    price: 120,
-    rating: 4.6,
-    reviewCount: 312,
-    type: "hotel" as const,
-    amenities: ["wifi", "parking"],
-  },
-  {
-    id: "santorini-cave-hotel",
-    name: "Cave Hotel Santorini",
-    location: "Santorini, Greece",
-    image: destinationSantorini,
-    price: 320,
-    rating: 4.8,
-    reviewCount: 178,
-    type: "hotel" as const,
-    amenities: ["wifi", "pool"],
-  },
-  {
-    id: "beach-villa-deluxe",
-    name: "Beachfront Deluxe Villa",
-    location: "Phuket, Thailand",
-    image: villaLuxury,
-    price: 380,
-    rating: 4.7,
-    reviewCount: 95,
-    type: "villa" as const,
-    amenities: ["wifi", "pool", "parking"],
-  },
-];
-
 export default function Stays() {
   const [showFilters, setShowFilters] = useState(false);
   const [activeType, setActiveType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("popular");
+  const [properties, setProperties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProperties = allProperties.filter((property) => {
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/properties");
+        const data = await response.json();
+        setProperties(data);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  const filteredProperties = properties.filter((property) => {
     const matchesType = activeType === "all" || property.type === activeType;
     let matchesPrice = true;
     if (priceRange === "budget") matchesPrice = property.price < 100;
@@ -127,7 +71,7 @@ export default function Stays() {
   return (
     <Layout>
       {/* Header */}
-      <section 
+      <section
         className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${hotels})` }}
       >

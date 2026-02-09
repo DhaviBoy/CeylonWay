@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { DestinationCard } from "@/components/cards/DestinationCard";
 import { DestinationsMap } from "@/components/maps/DestinationsMap";
@@ -6,14 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, MapPin, Grid, Map as MapIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import sigiriya from "@/assets/BW4YPnXzX3u1.jpg";
-import mirissa from "@/assets/coconut-tree-hill-2.jpg";
-import ella from "@/assets/Ella42.jpg";
-import kandy from "@/assets/Kandy.jpg";
-import galle from "@/assets/galle-fort-1050x700-1.jpg";
-import jaffna from "@/assets/LK61120100-03-E-1280-720.jpg";
-import polonnaruwa from "@/assets/f991ffa5d12203de2fa6e201392b017b.jpg";
 import hotels from "@/assets/home-banner-frame-1_531b0a49e14ce11ce2833cb243642c1b.jpg";
+
 const categories = [
   { id: "all", label: "All", icon: Grid },
   { id: "beach", label: "Beach", icon: MapPin },
@@ -22,95 +16,33 @@ const categories = [
   { id: "city", label: "City", icon: MapPin },
 ];
 
-const allDestinations = [
-  {
-    id: "sigiriya",
-    name: "Sigiriya",
-    country: "Sri Lanka",
-    image: sigiriya,
-    rating: 4.9,
-    propertyCount: 85,
-    category: "Cultural Heritage",
-    lat: 7.9428,
-    lng: 80.7613,
-  },
-  {
-    id: "mirissa",
-    name: "Mirissa",
-    country: "Sri Lanka",
-    image: mirissa,
-    rating: 4.8,
-    propertyCount: 120,
-    category: "Beach Paradise",
-    lat: 5.9271,
-    lng: 80.4765,
-  },
-  {
-    id: "ella",
-    name: "Ella",
-    country: "Sri Lanka",
-    image: ella,
-    rating: 4.9,
-    propertyCount: 95,
-    category: "Mountain",
-    lat: 6.8612,
-    lng: 81.0430,
-  },
-  {
-    id: "kandy",
-    name: "Kandy",
-    country: "Sri Lanka",
-    image: kandy,
-    rating: 4.7,
-    propertyCount: 150,
-    category: "Cultural",
-    lat: 6.9271,
-    lng: 80.6366,
-  },
-  {
-    id: "galle",
-    name: "Galle",
-    country: "Sri Lanka",
-    image: galle,
-    rating: 4.8,
-    propertyCount: 110,
-    category: "Beach & Historical",
-    lat: 6.0535,
-    lng: 80.2197,
-  },
-  {
-    id: "jaffna",
-    name: "Jaffna",
-    country: "Sri Lanka",
-    image: jaffna,
-    rating: 4.6,
-    propertyCount: 65,
-    category: "Beach & Cultural",
-    lat: 9.6615,
-    lng: 80.7740,
-  },
-  {
-    id: "polonnaruwa",
-    name: "Polonnaruwa",
-    country: "Sri Lanka",
-    image: polonnaruwa,
-    rating: 4.8,
-    propertyCount: 72,
-    category: "Cultural Heritage",
-    lat: 7.9408,
-    lng: 81.0022,
-  },
-];
-
 export default function Destinations() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredDestinations = allDestinations.filter((destination) => {
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/locations");
+        const data = await response.json();
+        setDestinations(data);
+      } catch (error) {
+        console.error("Error fetching destinations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  const filteredDestinations = destinations.filter((destination) => {
     const matchesSearch = destination.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       destination.country.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === "all" || 
+    const matchesCategory = activeCategory === "all" ||
       destination.category.toLowerCase().includes(activeCategory.toLowerCase());
     return matchesSearch && matchesCategory;
   });
@@ -118,10 +50,10 @@ export default function Destinations() {
   return (
     <Layout>
       {/* Header */}
-      <section 
-              className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${hotels})` }}
-            >
+      <section
+        className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${hotels})` }}
+      >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
