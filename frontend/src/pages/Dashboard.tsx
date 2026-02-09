@@ -21,7 +21,7 @@ import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
 
 const sidebarLinks = [
-  { name: "Profile", icon: User, href: "/dashboard" },
+  { name: "Profile", icon: User, href: "/dashboard/profile" },
   { name: "My Bookings", icon: Calendar, href: "/dashboard/bookings" },
   { name: "Wishlist", icon: Heart, href: "/dashboard/wishlist" },
   { name: "Reviews", icon: Star, href: "/dashboard/reviews" },
@@ -153,7 +153,7 @@ export default function Dashboard() {
                       to={link.href}
                       className={cn(
                         "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                        link.href === "/dashboard"
+                        link.href === "/dashboard/profile"
                           ? "bg-primary/10 text-primary"
                           : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                       )}
