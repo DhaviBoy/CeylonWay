@@ -5,9 +5,13 @@ const {
   register,
   login,
   getMe,
-  updateProfile
+  updateProfile,
+  getAllUsers,
+  updateProfileImage,
+  changePassword
 } = require('../controllers/authController');
-const { protect } = require('../middleware/auth');
+const { protect, admin } = require('../middleware/auth');
+const upload = require('../middleware/upload');
 
 // Validation rules
 const registerValidation = [
@@ -30,5 +34,10 @@ router.post('/login', loginValidation, login);
 // Protected routes (require authentication)
 router.get('/me', protect, getMe);
 router.put('/update-profile', protect, updateProfile);
+router.post('/profile-image', protect, upload.single('profileImage'), updateProfileImage);
+router.put('/change-password', protect, changePassword);
+
+// Admin only routes
+router.get('/users', protect, admin, getAllUsers);
 
 module.exports = router;

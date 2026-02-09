@@ -95,7 +95,20 @@ export const getCurrentUser = async () => {
 };
 
 // Update user profile (protected route)
-export const updateUserProfile = async (name: string, email: string) => {
+export const updateUserProfile = async (profileData: {
+  name?: string;
+  email?: string;
+  phone?: string;
+  bio?: string;
+  dateOfBirth?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zipCode?: string;
+  };
+}) => {
   try {
     const token = getToken();
 
@@ -109,7 +122,7 @@ export const updateUserProfile = async (name: string, email: string) => {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email }),
+      body: JSON.stringify(profileData),
     });
 
     const data = await response.json();
@@ -121,6 +134,70 @@ export const updateUserProfile = async (name: string, email: string) => {
     return data.user;
   } catch (error) {
     console.error('Update profile error:', error);
+    throw error;
+  }
+};
+
+// Upload profile image
+export const uploadProfileImage = async (file: File) => {
+  try {
+    const token = getToken();
+
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const formData = new FormData();
+    formData.append('profileImage', file);
+
+    const response = await fetch(`${API_BASE_URL}/auth/profile-image`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Upload failed');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Upload image error:', error);
+    throw error;
+  }
+};
+
+// Change password
+export const changePassword = async (currentPassword: string, newPassword: string) => {
+  try {
+    const token = getToken();
+
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/auth/change-password`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Password change failed');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Change password error:', error);
     throw error;
   }
 };

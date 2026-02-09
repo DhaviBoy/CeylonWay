@@ -1,18 +1,13 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { 
   User, 
   Calendar, 
   Heart, 
   Star, 
   Settings, 
-  LogOut,
-  Edit,
-  Check,
-  X
+  LogOut
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -86,8 +81,6 @@ function DashboardSidebar({ user, handleLogout }: { user: UserData | null; handl
 export default function Profile() {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "" });
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -96,7 +89,6 @@ export default function Profile() {
       try {
         const userData = await getCurrentUser();
         setUser(userData);
-        setFormData({ name: userData.name, email: userData.email });
       } catch (error) {
         toast({
           title: "Error",
@@ -119,14 +111,6 @@ export default function Profile() {
       description: "You have been successfully logged out.",
     });
     navigate("/");
-  };
-
-  const handleSaveProfile = () => {
-    toast({
-      title: "Success",
-      description: "Profile updated successfully!",
-    });
-    setIsEditing(false);
   };
 
   if (isLoading) {
@@ -172,12 +156,6 @@ export default function Profile() {
               <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
                 <div className="flex items-center justify-between mb-8">
                   <h1 className="text-3xl font-bold text-foreground">Your Profile</h1>
-                  {!isEditing && (
-                    <Button onClick={() => setIsEditing(true)} variant="outline" size="sm">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit Profile
-                    </Button>
-                  )}
                 </div>
 
                 {/* Profile Header */}
@@ -203,53 +181,17 @@ export default function Profile() {
                   </div>
                 </div>
 
-                {/* Edit Form */}
-                {isEditing ? (
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="name" className="text-base font-semibold">Full Name</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="mt-2"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-base font-semibold">Email Address</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="mt-2"
-                        placeholder="Enter your email"
-                      />
-                    </div>
-                    <div className="flex gap-3">
-                      <Button onClick={handleSaveProfile}>
-                        <Check className="w-4 h-4 mr-2" />
-                        Save Changes
-                      </Button>
-                      <Button variant="outline" onClick={() => setIsEditing(false)}>
-                        <X className="w-4 h-4 mr-2" />
-                        Cancel
-                      </Button>
-                    </div>
+                {/* Profile Information */}
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Email Address</p>
+                    <p className="text-lg font-medium text-foreground mt-1">{user.email}</p>
                   </div>
-                ) : (
-                  <div className="space-y-6">
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Email Address</p>
-                      <p className="text-lg font-medium text-foreground mt-1">{user.email}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wide">User ID</p>
-                      <p className="text-lg font-medium text-foreground mt-1 break-all">{user.id}</p>
-                    </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">User ID</p>
+                    <p className="text-lg font-medium text-foreground mt-1 break-all">{user.id}</p>
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Account Stats */}

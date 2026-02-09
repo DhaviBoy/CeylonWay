@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   User, 
   Calendar, 
@@ -8,15 +11,24 @@ import {
   Star, 
   Settings as SettingsIcon, 
   LogOut,
-  Bell,
+  Camera,
   Lock,
-  Globe,
-  Shield,
-  Check
+  Save,
+  Loader2,
+  Mail,
+  Phone,
+  MapPin,
+  FileText
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { getCurrentUser, logoutUser } from "@/lib/api";
+import { 
+  getCurrentUser, 
+  logoutUser, 
+  updateUserProfile, 
+  uploadProfileImage,
+  changePassword 
+} from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 const sidebarLinks = [
@@ -31,6 +43,17 @@ interface UserData {
   id: string;
   name: string;
   email: string;
+  phone?: string;
+  bio?: string;
+  dateOfBirth?: string;
+  profileImage?: string;
+  address?: {
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zipCode?: string;
+  };
   role: string;
   createdAt: string;
 }
@@ -42,8 +65,16 @@ function DashboardSidebar({ user, handleLogout }: { user: UserData | null; handl
     <div className="lg:col-span-1">
       <div className="bg-card rounded-2xl shadow-card p-6 sticky top-24">
         <div className="text-center mb-6 pb-6 border-b border-border">
-          <div className="w-20 h-20 rounded-full bg-gradient-coral flex items-center justify-center mx-auto mb-4">
-            <User className="w-10 h-10 text-primary-foreground" />
+          <div className="w-20 h-20 rounded-full bg-gradient-coral flex items-center justify-center mx-auto mb-4 overflow-hidden">
+            {user?.profileImage ? (
+              <img 
+                src={user.profileImage.startsWith('http') ? user.profileImage : `http://localhost:5000${user.profileImage}`} 
+                alt={user.name} 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <User className="w-10 h-10 text-primary-foreground" />
+            )}
           </div>
           <h2 className="text-xl font-bold text-foreground">{user?.name}</h2>
           <p className="text-muted-foreground text-sm">{user?.email}</p>
@@ -84,12 +115,32 @@ function DashboardSidebar({ user, handleLogout }: { user: UserData | null; handl
 export default function Settings() {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [notificationSettings, setNotificationSettings] = useState({
-    emailNotifications: true,
-    bookingUpdates: true,
-    reviewReminders: true,
-    promotions: false,
+  const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  
+  const [profileData, setProfileData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    bio: "",
+    dateOfBirth: "",
+    address: {
+      street: "",
+      city: "",
+      state: "",
+      country: "",
+      zipCode: ""
+    }
   });
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -98,6 +149,22 @@ export default function Settings() {
       try {
         const userData = await getCurrentUser();
         setUser(userData);
+        
+        // Populate form with user data
+        setProfileData({
+          name: userData.name || "",
+          email: userData.email || "",
+          phone: userData.phone || "",
+          bio: userData.bio || "",
+          dateOfBirth: userData.dateOfBirth ? userData.dateOfBirth.split('T')[0] : "",
+          address: {
+            street: userData.address?.street || "",
+            city: userData.address?.city || "",
+            state: userData.address?.state || "",
+            country: userData.address?.country || "",
+            zipCode: userData.address?.zipCode || ""
+          }
+        });
       } catch (error) {
         toast({
           title: "Error",
@@ -122,22 +189,149 @@ export default function Settings() {
     navigate("/");
   };
 
-  const toggleSetting = (key: keyof typeof notificationSettings) => {
-    setNotificationSettings({
-      ...notificationSettings,
-      [key]: !notificationSettings[key],
-    });
-    toast({
-      title: "Setting Updated",
-      description: "Your preference has been saved.",
-    });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    if (name.startsWith('address.')) {
+      const addressField = name.split('.')[1];
+      setProfileData({
+        ...profileData,
+        address: {
+          ...profileData.address,
+          [addressField]: value
+        }
+      });
+    } else {
+      setProfileData({
+        ...profileData,
+        [name]: value
+      });
+    }
   };
 
-  const handleSaveSettings = () => {
-    toast({
-      title: "Success",
-      description: "All settings have been saved successfully.",
-    });
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    try {
+      const updatedUser = await updateUserProfile(profileData);
+      setUser(updatedUser);
+      toast({
+        title: "Success",
+        description: "Profile updated successfully!",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update profile",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Error",
+        description: "Please select an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Error",
+        description: "Image size must be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUploadingImage(true);
+
+    try {
+      const result = await uploadProfileImage(file);
+      
+      // Update user state with new image
+      if (user) {
+        setUser({
+          ...user,
+          profileImage: result.profileImage
+        });
+      }
+
+      toast({
+        title: "Success",
+        description: "Profile image updated successfully!",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to upload image",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "New passwords do not match",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      await changePassword(passwordData.currentPassword, passwordData.newPassword);
+      
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+
+      toast({
+        title: "Success",
+        description: "Password changed successfully!",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to change password",
+        variant: "destructive",
+      });
+    } finally {
+      setIsChangingPassword(false);
+    }
   };
 
   if (isLoading) {
@@ -175,115 +369,295 @@ export default function Settings() {
             {/* Main Content */}
             <div className="lg:col-span-3">
               <div className="mb-8">
-                <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
-                <p className="text-muted-foreground">Manage your account preferences</p>
+                <h1 className="text-3xl font-bold text-foreground mb-2">Profile Settings</h1>
+                <p className="text-muted-foreground">Update your profile information and settings</p>
               </div>
 
               <div className="space-y-6">
-                {/* Notification Settings */}
+                {/* Profile Image */}
                 <div className="bg-card rounded-2xl shadow-card p-6">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Bell className="w-6 h-6 text-primary" />
+                      <Camera className="w-6 h-6 text-primary" />
                     </div>
-                    <h2 className="text-xl font-bold text-foreground">Notification Settings</h2>
+                    <h2 className="text-xl font-bold text-foreground">Profile Image</h2>
                   </div>
 
-                  <div className="space-y-4">
-                    {Object.entries(notificationSettings).map(([key, value]) => (
-                      <div
-                        key={key}
-                        className="flex items-center justify-between p-4 rounded-xl hover:bg-secondary/50 transition-colors"
-                      >
-                        <div>
-                          <p className="font-semibold text-foreground capitalize">
-                            {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {key === 'emailNotifications' && 'Receive email updates about your account'}
-                            {key === 'bookingUpdates' && 'Get updates about your bookings'}
-                            {key === 'reviewReminders' && 'Reminders to leave reviews'}
-                            {key === 'promotions' && 'Receive promotional offers and deals'}
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => toggleSetting(key as keyof typeof notificationSettings)}
-                          className={cn(
-                            "relative w-14 h-8 rounded-full transition-all",
-                            value ? "bg-primary" : "bg-muted"
-                          )}
-                        >
-                          <div
-                            className={cn(
-                              "absolute top-1 left-1 w-6 h-6 rounded-full bg-white transition-transform",
-                              value && "translate-x-6"
-                            )}
+                  <div className="flex items-center gap-6">
+                    <div className="relative">
+                      <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-coral flex items-center justify-center">
+                        {user.profileImage ? (
+                          <img 
+                            src={user.profileImage.startsWith('http') ? user.profileImage : `http://localhost:5000${user.profileImage}`} 
+                            alt={user.name} 
+                            className="w-full h-full object-cover"
                           />
-                        </button>
+                        ) : (
+                          <User className="w-12 h-12 text-primary-foreground" />
+                        )}
                       </div>
-                    ))}
+                      {isUploadingImage && (
+                        <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <Button onClick={handleImageClick} disabled={isUploadingImage}>
+                        <Camera className="w-4 h-4 mr-2" />
+                        {isUploadingImage ? "Uploading..." : "Change Photo"}
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                      <p className="text-sm text-muted-foreground mt-2">
+                        JPG, PNG, GIF or WEBP. Max size 5MB.
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Security Settings */}
-                <div className="bg-card rounded-2xl shadow-card p-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-ocean/10 flex items-center justify-center">
-                      <Lock className="w-6 h-6 text-ocean" />
+                {/* Personal Information */}
+                <form onSubmit={handleProfileUpdate}>
+                  <div className="bg-card rounded-2xl shadow-card p-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-ocean/10 flex items-center justify-center">
+                        <User className="w-6 h-6 text-ocean" />
+                      </div>
+                      <h2 className="text-xl font-bold text-foreground">Personal Information</h2>
                     </div>
-                    <h2 className="text-xl font-bold text-foreground">Security</h2>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                          <Input
+                            id="name"
+                            name="name"
+                            value={profileData.name}
+                            onChange={handleInputChange}
+                            className="pl-10"
+                            placeholder="John Doe"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email Address</Label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={profileData.email}
+                            onChange={handleInputChange}
+                            className="pl-10"
+                            placeholder="john@example.com"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Phone Number</Label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                          <Input
+                            id="phone"
+                            name="phone"
+                            value={profileData.phone}
+                            onChange={handleInputChange}
+                            className="pl-10"
+                            placeholder="+1234567890"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                        <div className="relative">
+                          <Calendar className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                          <Input
+                            id="dateOfBirth"
+                            name="dateOfBirth"
+                            type="date"
+                            value={profileData.dateOfBirth}
+                            onChange={handleInputChange}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="md:col-span-2 space-y-2">
+                        <Label htmlFor="bio">Bio</Label>
+                        <div className="relative">
+                          <FileText className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                          <Textarea
+                            id="bio"
+                            name="bio"
+                            value={profileData.bio}
+                            onChange={handleInputChange}
+                            className="pl-10 min-h-[100px]"
+                            placeholder="Tell us about yourself..."
+                            maxLength={500}
+                          />
+                        </div>
+                        <p className="text-xs text-muted-foreground text-right">
+                          {profileData.bio.length}/500 characters
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Lock className="w-5 h-5 mr-3" />
-                      Change Password
+                  {/* Address */}
+                  <div className="bg-card rounded-2xl shadow-card p-6 mt-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-sunset/10 flex items-center justify-center">
+                        <MapPin className="w-6 h-6 text-sunset" />
+                      </div>
+                      <h2 className="text-xl font-bold text-foreground">Address</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="md:col-span-2 space-y-2">
+                        <Label htmlFor="address.street">Street Address</Label>
+                        <Input
+                          id="address.street"
+                          name="address.street"
+                          value={profileData.address.street}
+                          onChange={handleInputChange}
+                          placeholder="123 Main Street"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address.city">City</Label>
+                        <Input
+                          id="address.city"
+                          name="address.city"
+                          value={profileData.address.city}
+                          onChange={handleInputChange}
+                          placeholder="Colombo"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address.state">State/Province</Label>
+                        <Input
+                          id="address.state"
+                          name="address.state"
+                          value={profileData.address.state}
+                          onChange={handleInputChange}
+                          placeholder="Western"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address.country">Country</Label>
+                        <Input
+                          id="address.country"
+                          name="address.country"
+                          value={profileData.address.country}
+                          onChange={handleInputChange}
+                          placeholder="Sri Lanka"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="address.zipCode">Zip/Postal Code</Label>
+                        <Input
+                          id="address.zipCode"
+                          name="address.zipCode"
+                          value={profileData.address.zipCode}
+                          onChange={handleInputChange}
+                          placeholder="00100"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end mt-6">
+                    <Button type="submit" disabled={isSaving}>
+                      {isSaving ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4 mr-2" />
+                          Save Profile
+                        </>
+                      )}
                     </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Shield className="w-5 h-5 mr-3" />
-                      Two-Factor Authentication
-                    </Button>
                   </div>
-                </div>
+                </form>
 
-                {/* Privacy Settings */}
-                <div className="bg-card rounded-2xl shadow-card p-6">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-sunset/10 flex items-center justify-center">
-                      <Globe className="w-6 h-6 text-sunset" />
-                    </div>
-                    <h2 className="text-xl font-bold text-foreground">Privacy</h2>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-xl hover:bg-secondary/50 transition-colors">
-                      <div>
-                        <p className="font-semibold text-foreground">Profile Visibility</p>
-                        <p className="text-sm text-muted-foreground">Let others see your reviews and profile</p>
+                {/* Change Password */}
+                <form onSubmit={handlePasswordChange}>
+                  <div className="bg-card rounded-2xl shadow-card p-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
+                        <Lock className="w-6 h-6 text-destructive" />
                       </div>
-                      <button className="relative w-14 h-8 rounded-full bg-primary">
-                        <div className="absolute top-1 left-1 w-6 h-6 rounded-full bg-white" />
-                      </button>
+                      <h2 className="text-xl font-bold text-foreground">Change Password</h2>
                     </div>
-                    <div className="flex items-center justify-between p-4 rounded-xl hover:bg-secondary/50 transition-colors">
-                      <div>
-                        <p className="font-semibold text-foreground">Activity Status</p>
-                        <p className="text-sm text-muted-foreground">Show when you're online</p>
+
+                    <div className="space-y-4 max-w-md">
+                      <div className="space-y-2">
+                        <Label htmlFor="currentPassword">Current Password</Label>
+                        <Input
+                          id="currentPassword"
+                          type="password"
+                          value={passwordData.currentPassword}
+                          onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                          placeholder="Enter current password"
+                        />
                       </div>
-                      <button className="relative w-14 h-8 rounded-full bg-muted">
-                        <div className="absolute top-1 left-1 w-6 h-6 rounded-full bg-white" />
-                      </button>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="newPassword">New Password</Label>
+                        <Input
+                          id="newPassword"
+                          type="password"
+                          value={passwordData.newPassword}
+                          onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+                          placeholder="Enter new password"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                        <Input
+                          id="confirmPassword"
+                          type="password"
+                          value={passwordData.confirmPassword}
+                          onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                          placeholder="Confirm new password"
+                        />
+                      </div>
+
+                      <Button type="submit" disabled={isChangingPassword}>
+                        {isChangingPassword ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Changing...
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-4 h-4 mr-2" />
+                            Change Password
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
-                </div>
-
-                {/* Save Button */}
-                <div className="flex gap-3 justify-end">
-                  <Button onClick={handleSaveSettings}>
-                    <Check className="w-4 h-4 mr-2" />
-                    Save All Settings
-                  </Button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
