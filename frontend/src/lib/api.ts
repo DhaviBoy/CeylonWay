@@ -11,14 +11,14 @@ export const setToken = (token: string) => localStorage.setItem('authToken', tok
 export const removeToken = () => localStorage.removeItem('authToken');
 
 // Register user
-export const registerUser = async (name: string, email: string, password: string) => {
+export const registerUser = async (name: string, email: string, password: string, role: string = 'traveller') => {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, role }),
     });
 
     const data = await response.json();

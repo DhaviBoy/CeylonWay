@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Globe, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { Globe, Mail, Lock, Eye, EyeOff, User, MapPin, Hotel } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { registerUser } from "@/lib/api";
 import "./Login.css";
@@ -13,6 +13,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState<"traveller" | "hotelOwner">("traveller");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,15 +25,19 @@ export default function Register() {
 
     try {
       // Call backend API to register
-      const response = await registerUser(name, email, password);
+      const response = await registerUser(name, email, password, userType);
 
       toast({
         title: "Welcome to Ceylonway!",
-        description: "Your account has been created successfully.",
+        description: `Your account has been created successfully as a ${userType === 'traveller' ? 'Traveller' : 'Hotel Owner'}.`,
       });
 
-      // Navigate to dashboard with user data
-      navigate("/dashboard");
+      // Redirect to appropriate dashboard based on user type
+      if (userType === 'hotelOwner') {
+        navigate("/hotel-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       toast({
         title: "Registration Failed",
@@ -67,6 +72,37 @@ export default function Register() {
           {/* Form */}
           <div className="bg-card rounded-2xl shadow-card p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* User Type Selection */}
+              <div className="space-y-3">
+                <Label className="text-base">Who are you?</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setUserType("traveller")}
+                    className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                      userType === "traveller"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <MapPin className="w-6 h-6 text-primary" />
+                    <span className="text-sm font-medium">Traveller</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setUserType("hotelOwner")}
+                    className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
+                      userType === "hotelOwner"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <Hotel className="w-6 h-6 text-primary" />
+                    <span className="text-sm font-medium">Hotel Owner</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">

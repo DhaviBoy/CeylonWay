@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { 
-  User, 
+  Building2, 
   Calendar, 
-  Heart, 
   Star, 
   Settings, 
   LogOut,
-  MapPin,
+  BarChart3,
+  Plus,
   Clock,
-  ChevronRight
+  ChevronRight,
+  TrendingUp
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -21,30 +22,51 @@ import villaLuxury from "@/assets/villa-luxury.jpg";
 import hotelBoutique from "@/assets/hotel-boutique.jpg";
 
 const sidebarLinks = [
-  { name: "Profile", icon: User, href: "/dashboard/profile" },
-  { name: "My Bookings", icon: Calendar, href: "/dashboard/bookings" },
-  { name: "Wishlist", icon: Heart, href: "/dashboard/wishlist" },
-  { name: "Reviews", icon: Star, href: "/dashboard/reviews" },
-  { name: "Settings", icon: Settings, href: "/dashboard/settings" },
+  { name: "My Properties", icon: Building2, href: "/hotel-dashboard/properties" },
+  { name: "Bookings", icon: Calendar, href: "/hotel-dashboard/bookings" },
+  { name: "Reviews", icon: Star, href: "/hotel-dashboard/reviews" },
+  { name: "Analytics", icon: BarChart3, href: "/hotel-dashboard/analytics" },
+  { name: "Settings", icon: Settings, href: "/hotel-dashboard/settings" },
+];
+
+const mockProperties = [
+  {
+    id: "1",
+    name: "Luxury Beachfront Villa",
+    location: "Mirissa, Sri Lanka",
+    image: villaLuxury,
+    status: "active",
+    bookings: 12,
+    revenue: "$4,500",
+    rating: 4.9,
+  },
+  {
+    id: "2",
+    name: "Mountain Boutique Hotel",
+    location: "Kandy, Sri Lanka",
+    image: hotelBoutique,
+    status: "active",
+    bookings: 8,
+    revenue: "$3,200",
+    rating: 4.7,
+  },
 ];
 
 const upcomingBookings = [
   {
     id: "1",
-    property: "Oceanfront Luxury Villa",
-    location: "Maldives",
-    image: villaLuxury,
+    guestName: "John Doe",
+    property: "Luxury Beachfront Villa",
     checkIn: "Feb 15, 2026",
     checkOut: "Feb 20, 2026",
     status: "confirmed",
   },
   {
     id: "2",
-    property: "Seaside Boutique Hotel",
-    location: "Bali, Indonesia",
-    image: hotelBoutique,
-    checkIn: "Mar 5, 2026",
-    checkOut: "Mar 10, 2026",
+    guestName: "Jane Smith",
+    property: "Mountain Boutique Hotel",
+    checkIn: "Feb 18, 2026",
+    checkOut: "Feb 25, 2026",
     status: "pending",
   },
 ];
@@ -57,7 +79,7 @@ interface UserData {
   createdAt: string;
 }
 
-export default function Dashboard() {
+export default function HotelOwnerDashboard() {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -68,6 +90,13 @@ export default function Dashboard() {
     const fetchUser = async () => {
       try {
         const userData = await getCurrentUser();
+        
+        // Redirect if user is not a hotel owner
+        if (userData.role !== 'hotelOwner') {
+          navigate('/dashboard');
+          return;
+        }
+        
         setUser(userData);
       } catch (error) {
         toast({
@@ -99,7 +128,7 @@ export default function Dashboard() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your profile...</p>
+            <p className="text-muted-foreground">Loading your dashboard...</p>
           </div>
         </div>
       </Layout>
@@ -137,12 +166,13 @@ export default function Dashboard() {
               <div className="bg-card rounded-2xl shadow-card p-6 sticky top-24">
                 {/* User Info */}
                 <div className="text-center mb-6 pb-6 border-b border-border">
-                  <div className="w-20 h-20 rounded-full bg-gradient-coral flex items-center justify-center mx-auto mb-4">
-                    <User className="w-10 h-10 text-primary-foreground" />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-ocean to-primary flex items-center justify-center mx-auto mb-4">
+                    <Building2 className="w-10 h-10 text-primary-foreground" />
                   </div>
                   <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
                   <p className="text-muted-foreground text-sm">{user.email}</p>
-                  <p className="text-xs text-muted-foreground mt-2">Member since {memberSinceDate}</p>
+                  <p className="text-xs text-muted-foreground mt-2">Hotel Owner</p>
+                  <p className="text-xs text-muted-foreground">Member since {memberSinceDate}</p>
                 </div>
 
                 {/* Navigation */}
@@ -153,7 +183,7 @@ export default function Dashboard() {
                       to={link.href}
                       className={cn(
                         "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                        link.href === "/dashboard/profile"
+                        link.href === "/hotel-dashboard"
                           ? "bg-primary/10 text-primary"
                           : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                       )}
@@ -179,20 +209,20 @@ export default function Dashboard() {
             {/* Main Content */}
             <div className="lg:col-span-3 space-y-8">
               {/* Welcome */}
-              <div className="bg-gradient-coral rounded-2xl p-6 md:p-8 text-primary-foreground">
+              <div className="bg-gradient-to-r from-ocean to-primary rounded-2xl p-6 md:p-8 text-primary-foreground">
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, {user.name}! 👋</h1>
                 <p className="text-primary-foreground/90">
-                  Ready for your next adventure? You have 2 upcoming trips.
+                  Manage your properties and track bookings all in one place.
                 </p>
               </div>
 
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: "Total Trips", value: "12", icon: MapPin },
-                  { label: "Upcoming", value: "2", icon: Calendar },
-                  { label: "Wishlist", value: "8", icon: Heart },
-                  { label: "Reviews", value: "5", icon: Star },
+                  { label: "Active Properties", value: "2", icon: Building2 },
+                  { label: "Total Bookings", value: "20", icon: Calendar },
+                  { label: "Revenue", value: "$7,700", icon: TrendingUp },
+                  { label: "Avg Rating", value: "4.8", icon: Star },
                 ].map((stat) => (
                   <div key={stat.label} className="bg-card rounded-xl p-4 shadow-card">
                     <div className="flex items-center gap-3 mb-2">
@@ -206,59 +236,105 @@ export default function Dashboard() {
                 ))}
               </div>
 
-              {/* Upcoming Bookings */}
+              {/* Properties */}
               <div className="bg-card rounded-2xl shadow-card p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-foreground">Upcoming Trips</h2>
+                  <h2 className="text-xl font-bold text-foreground">Your Properties</h2>
+                  <Button size="sm" asChild>
+                    <Link to="/hotel-dashboard/properties">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Property
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="space-y-4">
+                  {mockProperties.map((property) => (
+                    <div
+                      key={property.id}
+                      className="flex flex-col md:flex-row gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+                    >
+                      <img
+                        src={property.image}
+                        alt={property.name}
+                        className="w-full md:w-32 h-24 object-cover rounded-lg"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{property.name}</h3>
+                            <p className="text-sm text-muted-foreground">{property.location}</p>
+                          </div>
+                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-ocean/20 text-ocean capitalize">
+                            {property.status}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Bookings</p>
+                            <p className="font-semibold text-foreground">{property.bookings}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Revenue</p>
+                            <p className="font-semibold text-foreground">{property.revenue}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Rating</p>
+                            <p className="font-semibold text-foreground flex items-center gap-1">
+                              <Star className="w-3 h-3 fill-golden text-golden" />
+                              {property.rating}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" className="self-start md:self-center" asChild>
+                        <Link to={`/hotel-dashboard/properties/${property.id}`}>
+                          Manage
+                        </Link>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Bookings */}
+              <div className="bg-card rounded-2xl shadow-card p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-foreground">Upcoming Bookings</h2>
                   <Button variant="ghost" size="sm" asChild>
-                    <Link to="/dashboard/bookings">
+                    <Link to="/hotel-dashboard/bookings">
                       View All
                       <ChevronRight className="w-4 h-4" />
                     </Link>
                   </Button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {upcomingBookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="flex flex-col md:flex-row gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+                      className="p-4 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
                     >
-                      <img
-                        src={booking.image}
-                        alt={booking.property}
-                        className="w-full md:w-32 h-24 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="font-semibold text-foreground">{booking.property}</h3>
-                            <p className="text-sm text-muted-foreground flex items-center gap-1">
-                              <MapPin className="w-3 h-3" />
-                              {booking.location}
-                            </p>
-                          </div>
-                          <span
-                            className={cn(
-                              "px-3 py-1 rounded-full text-xs font-medium capitalize",
-                              booking.status === "confirmed"
-                                ? "bg-ocean/20 text-ocean"
-                                : "bg-golden/20 text-golden"
-                            )}
-                          >
-                            {booking.status}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-foreground">{booking.guestName}</h3>
+                          <p className="text-sm text-muted-foreground">{booking.property}</p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                            <Clock className="w-3 h-3" />
                             {booking.checkIn} - {booking.checkOut}
-                          </span>
+                          </p>
                         </div>
+                        <span
+                          className={cn(
+                            "px-3 py-1 rounded-full text-xs font-medium capitalize",
+                            booking.status === "confirmed"
+                              ? "bg-ocean/20 text-ocean"
+                              : "bg-golden/20 text-golden"
+                          )}
+                        >
+                          {booking.status}
+                        </span>
                       </div>
-                      <Button variant="outline" size="sm" className="self-start md:self-center">
-                        View Details
-                      </Button>
                     </div>
                   ))}
                 </div>

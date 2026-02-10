@@ -23,14 +23,20 @@ export default function Login() {
 
     try {
       // Call backend API to login
-      await loginUser(email, password);
+      const response = await loginUser(email, password);
 
       toast({
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
 
-      navigate("/dashboard");
+      // Redirect based on user role
+      const userRole = response.user?.role || response.role;
+      if (userRole === 'hotelOwner') {
+        navigate("/hotel-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       toast({
         title: "Login Failed",

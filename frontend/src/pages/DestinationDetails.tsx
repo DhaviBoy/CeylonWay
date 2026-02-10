@@ -409,9 +409,9 @@ export default function DestinationDetails() {
             </div>
 
             {/* Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-6 sticky top-20 h-fit will-change-transform max-h-[calc(100vh-80px)] overflow-y-auto">
               {/* Quick Info Card */}
-              <div className="bg-card rounded-2xl shadow-card p-6 sticky top-24">
+              <div className="bg-card rounded-2xl shadow-card p-6">
                 <h3 className="text-lg font-bold text-foreground mb-4">Plan Your Visit</h3>
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center justify-between">
@@ -453,6 +453,7 @@ export default function DestinationDetails() {
                     destinationName={destination.name}
                     height="320px"
                     zoom={14}
+                    scrollWheelZoom={false}
                   />
                 ) : (
                   <div className="h-[320px] w-full rounded-xl bg-secondary flex items-center justify-center text-muted-foreground">

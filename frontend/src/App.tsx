@@ -13,12 +13,18 @@ import Stays from "./pages/Stays";
 import About from "./pages/About";
 import Login from "./pages/login&signup/Login";
 import Register from "./pages/login&signup/Register";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/dashboard/Profile";
-import MyBookings from "./pages/dashboard/MyBookings";
-import Wishlist from "./pages/dashboard/Wishlist";
-import Reviews from "./pages/dashboard/Reviews";
-import Settings from "./pages/dashboard/Settings";
+import Dashboard from "./pages/travelerDashboard";
+import Profile from "./pages/travelerDash/Profile";
+import MyBookings from "./pages/travelerDash/MyBookings";
+import Wishlist from "./pages/travelerDash/Wishlist";
+import Reviews from "./pages/travelerDash/Reviews";
+import Settings from "./pages/travelerDash/Settings";
+import HotelOwnerDashboard from "./pages/HotelOwnerDashboard";
+import MyProperties from "./pages/hotelDashboard/MyProperties";
+import PropertyBookings from "./pages/hotelDashboard/PropertyBookings";
+import HotelReviews from "./pages/hotelDashboard/Reviews";
+import Analytics from "./pages/hotelDashboard/Analytics";
+import HotelSettings from "./pages/hotelDashboard/Settings";
 import NotFound from "./pages/NotFound";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
@@ -59,12 +65,23 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* Traveller Dashboard Routes */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/profile" element={<Profile />} />
             <Route path="/dashboard/bookings" element={<MyBookings />} />
             <Route path="/dashboard/wishlist" element={<Wishlist />} />
             <Route path="/dashboard/reviews" element={<Reviews />} />
             <Route path="/dashboard/settings" element={<Settings />} />
+            
+            {/* Hotel Owner Dashboard Routes */}
+            <Route path="/hotel-dashboard" element={<HotelOwnerDashboard />} />
+            <Route path="/hotel-dashboard/properties" element={<MyProperties />} />
+            <Route path="/hotel-dashboard/bookings" element={<PropertyBookings />} />
+            <Route path="/hotel-dashboard/reviews" element={<HotelReviews />} />
+            <Route path="/hotel-dashboard/analytics" element={<Analytics />} />
+            <Route path="/hotel-dashboard/settings" element={<HotelSettings />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

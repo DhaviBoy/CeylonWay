@@ -10,6 +10,7 @@ interface GoogleMapProps {
   destinationName: string;
   height?: string;
   zoom?: number;
+  scrollWheelZoom?: boolean;
 }
 
 // Create a custom marker icon
@@ -31,6 +32,7 @@ export function GoogleMap({
   destinationName,
   height = "400px",
   zoom = 13,
+  scrollWheelZoom = true,
 }: GoogleMapProps) {
   const [isMounted, setIsMounted] = useState(false);
   const validLat = typeof latitude === 'number' ? latitude : 0;
@@ -73,7 +75,7 @@ export function GoogleMap({
         key={`${validLat}-${validLng}`}
         center={position}
         zoom={zoom}
-        scrollWheelZoom={true}
+        scrollWheelZoom={scrollWheelZoom}
         style={{ width: "100%", height: "100%" }}
         className="w-full h-full"
       >
