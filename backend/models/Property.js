@@ -46,6 +46,14 @@ const propertySchema = new mongoose.Schema({
     }],
     description: {
         type: String
+    },
+    lat: {
+        type: Number,
+        default: 6.9271
+    },
+    lng: {
+        type: Number,
+        default: 80.7789
     }
 }, { timestamps: true });
 

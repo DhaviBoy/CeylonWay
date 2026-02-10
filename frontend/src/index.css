@@ -303,6 +303,21 @@
   animation: zoomIn 8s ease-out infinite;
 }
 
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 1;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 4px 8px;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

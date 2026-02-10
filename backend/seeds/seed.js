@@ -347,7 +347,9 @@ const properties = [
         reviewCount: 1250,
         type: "hotel",
         amenities: ["wifi", "pool", "spa", "restaurant"],
-        description: "A luxury resort in Ella, Sri Lanka, surrounded by tea plantations and mountains."
+        description: "A luxury resort in Ella, Sri Lanka, surrounded by tea plantations and mountains.",
+        lat: 6.8710,
+        lng: 81.0456
     },
     {
         id: "cape-weligama",
@@ -360,7 +362,9 @@ const properties = [
         reviewCount: 890,
         type: "hotel",
         amenities: ["wifi", "pool", "spa", "beach access"],
-        description: "A cliffside resort with panoramic views of the Indian Ocean."
+        description: "A cliffside resort with panoramic views of the Indian Ocean.",
+        lat: 5.9632,
+        lng: 80.4768
     },
     {
         id: "water-garden-sigiriya",
@@ -373,7 +377,9 @@ const properties = [
         reviewCount: 450,
         type: "hotel",
         amenities: ["wifi", "pool", "view"],
-        description: "Luxury villas with views of the Sigiriya Rock Fortress."
+        description: "Luxury villas with views of the Sigiriya Rock Fortress.",
+        lat: 7.9571,
+        lng: 80.7603
     },
     {
         id: "amangalla",
@@ -386,7 +392,9 @@ const properties = [
         reviewCount: 320,
         type: "hotel",
         amenities: ["wifi", "pool", "spa", "historical"],
-        description: "A historic hotel located within the UNESCO World Heritage site of Galle Fort."
+        description: "A historic hotel located within the UNESCO World Heritage site of Galle Fort.",
+        lat: 6.0535,
+        lng: 80.2197
     },
     {
         id: "jetwing-jaffna",
@@ -399,7 +407,9 @@ const properties = [
         reviewCount: 210,
         type: "hotel",
         amenities: ["wifi", "restaurant", "roof top bar"],
-        description: "A modern hotel in the heart of Jaffna city."
+        description: "A modern hotel in the heart of Jaffna city.",
+        lat: 9.6615,
+        lng: 80.0255
     },
     {
         id: "hotel-sigiriya",
@@ -412,7 +422,9 @@ const properties = [
         reviewCount: 560,
         type: "hotel",
         amenities: ["wifi", "pool", "view"],
-        description: "Offering a prime view of the Sigiriya Rock Fortress."
+        description: "Offering a prime view of the Sigiriya Rock Fortress.",
+        lat: 7.9538,
+        lng: 80.7584
     },
     {
         id: "ella-jungle-resort",
@@ -425,7 +437,9 @@ const properties = [
         reviewCount: 300,
         type: "villa",
         amenities: ["wifi", "nature", "adventure"],
-        description: "An eco-friendly resort nestled in the jungle near Ella."
+        description: "An eco-friendly resort nestled in the jungle near Ella.",
+        lat: 6.8624,
+        lng: 81.0352
     },
     {
         id: "araliya-green-city",
@@ -438,7 +452,9 @@ const properties = [
         reviewCount: 400,
         type: "hotel",
         amenities: ["wifi", "pool", "spa", "heated pool"],
-        description: "Luxury hotel in the cool climate of Nuwara Eliya."
+        description: "Luxury hotel in the cool climate of Nuwara Eliya.",
+        lat: 6.9497,
+        lng: 80.7851
     }
 ];
 

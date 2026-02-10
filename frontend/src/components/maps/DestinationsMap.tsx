@@ -55,31 +55,33 @@ export function DestinationsMap({ destinations, onDestinationClick }: Destinatio
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {destinations.map((destination) => (
-          <Marker
-            key={destination.id}
-            position={[destination.lat, destination.lng]}
-            icon={createCustomMarker()}
-            eventHandlers={{
-              click: () => onDestinationClick?.(destination),
-            }}
-          >
-            <Popup className="custom-popup">
-              <div className="text-sm">
-                <h3 className="font-bold text-foreground">{destination.name}</h3>
-                <p className="text-xs text-muted-foreground">{destination.country}</p>
-                <div className="mt-2 space-y-1 text-xs">
-                  <p>
-                    <span className="font-semibold">Properties:</span> {destination.propertyCount}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Rating:</span> ⭐ {destination.rating}
-                  </p>
+        {destinations
+          .filter(d => typeof d.lat === 'number' && typeof d.lng === 'number')
+          .map((destination) => (
+            <Marker
+              key={destination.id}
+              position={[destination.lat, destination.lng]}
+              icon={createCustomMarker()}
+              eventHandlers={{
+                click: () => onDestinationClick?.(destination),
+              }}
+            >
+              <Popup className="custom-popup">
+                <div className="text-sm">
+                  <h3 className="font-bold text-foreground">{destination.name}</h3>
+                  <p className="text-xs text-muted-foreground">{destination.country}</p>
+                  <div className="mt-2 space-y-1 text-xs">
+                    <p>
+                      <span className="font-semibold">Properties:</span> {destination.propertyCount}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Rating:</span> ⭐ {destination.rating}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+              </Popup>
+            </Marker>
+          ))}
       </MapContainer>
     </div>
   );

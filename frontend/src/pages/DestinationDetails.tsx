@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import { Button } from "@/components/ui/button";
-import { 
-  MapPin, 
-  Calendar, 
-  Sun, 
-  Plane, 
-  Info, 
+import { GoogleMap } from "@/components/maps/GoogleMap";
+import {
+  MapPin,
+  Calendar,
+  Sun,
+  Plane,
+  Info,
   Building2,
   ChevronLeft,
   Star,
@@ -195,16 +196,19 @@ export default function DestinationDetails() {
   const { toast } = useToast();
   const nearbyProperties = getPropertiesByDestination(id || "galle");
 
+  console.log("Rendering DestinationDetails, id:", id);
+
   useEffect(() => {
     const fetchDestinationDetails = async () => {
+      console.log("Fetching details for:", id);
       try {
         setLoading(true);
         const response = await fetch(`http://localhost:5000/api/locations/${id}`);
-        
+
         if (!response.ok) {
           throw new Error('Destination not found');
         }
-        
+
         const data = await response.json();
         setDestination(data);
       } catch (error: any) {
@@ -260,7 +264,7 @@ export default function DestinationDetails() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-hero" />
-        
+
         {/* Back Button */}
         <Link
           to="/destinations"
@@ -438,15 +442,25 @@ export default function DestinationDetails() {
 
               {/* Map Preview */}
               <div className="bg-card rounded-2xl shadow-card p-6">
-                <h3 className="text-lg font-bold text-foreground mb-4">Location</h3>
-                <div className="aspect-square rounded-xl bg-secondary flex items-center justify-center mb-4">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Interactive map coming soon</p>
+                <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-primary" />
+                  Location
+                </h3>
+                {destination.lat && destination.lng ? (
+                  <GoogleMap
+                    latitude={destination.lat}
+                    longitude={destination.lng}
+                    destinationName={destination.name}
+                    height="320px"
+                    zoom={14}
+                  />
+                ) : (
+                  <div className="h-[320px] w-full rounded-xl bg-secondary flex items-center justify-center text-muted-foreground">
+                    Map location not available
                   </div>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <p className="font-semibold text-foreground mb-1">Coordinates:</p>
+                )}
+                <div className="text-sm text-muted-foreground mt-4">
+                  <p className="font-semibold text-foreground mb-2">Coordinates:</p>
                   <p>Latitude: {destination.lat}</p>
                   <p>Longitude: {destination.lng}</p>
                 </div>
