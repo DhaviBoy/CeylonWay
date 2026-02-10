@@ -23,7 +23,11 @@ exports.register = async (req, res) => {
       });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+
+    // Validate role
+    const validRoles = ['traveller', 'hotelOwner'];
+    const userRole = role && validRoles.includes(role) ? role : 'traveller';
 
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -38,7 +42,8 @@ exports.register = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password
+      password,
+      role: userRole
     });
 
     // Generate token
