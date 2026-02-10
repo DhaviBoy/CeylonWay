@@ -3,6 +3,12 @@
 <div align="center">
   <p><strong>Discover the Pearl of the Indian Ocean</strong></p>
   <p>A modern, full-stack travel platform for exploring Sri Lanka's destinations and booking accommodations</p>
+  
+  ![React](https://img.shields.io/badge/React-18.3.1-blue)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)
+  ![Node.js](https://img.shields.io/badge/Node.js-Latest-green)
+  ![MongoDB](https://img.shields.io/badge/MongoDB-Latest-green)
+  ![License](https://img.shields.io/badge/License-MIT-yellow)
 </div>
 
 ---
@@ -10,127 +16,118 @@
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
+- [Demo](#-demo)
 - [Features](#-features)
+- [Screenshots](#-screenshots)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Running the Application](#-running-the-application)
-- [API Documentation](#-api-documentation)
-- [Database Schema](#-database-schema)
-- [Frontend Architecture](#-frontend-architecture)
-- [Development](#-development)
-- [Deployment](#-deployment)
+- [Getting Started](#-getting-started)
+- [API Endpoints](#-api-endpoints)
+- [Database Models](#-database-models)
 - [Contributing](#-contributing)
 - [License](#-license)
+- [Contact](#-contact)
 
 ---
 
 ## 🌟 Overview
 
-**CeylonWay** is a comprehensive tourism web platform designed to help travelers explore Sri Lanka's diverse destinations and book accommodations seamlessly. Built with modern web technologies, it features an intuitive interface, interactive maps, detailed destination guides, and a robust search system for finding perfect stays.
+**CeylonWay** is a comprehensive tourism web platform designed to help travelers explore Sri Lanka's diverse destinations and book accommodations seamlessly. Built with modern web technologies, it features an intuitive interface, interactive maps, detailed destination guides, and a robust search system.
 
-The platform provides travelers with:
-- In-depth destination information including overview, attractions, travel tips, and best visiting times
-- Interactive maps powered by Leaflet/OpenStreetMap showing real geographic locations
-- Property listings with detailed information, images, amenities, and pricing
-- User authentication and personalized dashboard
-- Responsive design for optimal experience across all devices
+**Key Highlights:**
+- 🗺️ Interactive maps with real geographic locations using Leaflet/OpenStreetMap
+- 🏨 7+ curated destinations with detailed information and 8+ property listings
+- 🔐 Secure JWT-based authentication with protected routes
+- 📱 Fully responsive design optimized for all devices
+- ⚡ Fast and smooth experience with React + Vite + TypeScript
+
+---
+
+## 🎬 Demo
+
+> **Live Demo:** [Coming Soon](#)
+
+> **Note:** This is a portfolio project showcasing full-stack development skills with modern web technologies.
 
 ---
 
 ## ✨ Features
 
 ### 🗺️ **Destination Discovery**
-- Browse 7+ curated destinations across Sri Lanka
-- Detailed destination pages with comprehensive information:
-  - Overview and city description
+- Browse curated destinations across Sri Lanka (Galle, Sigiriya, Mirissa, Ella, Kandy, Nuwara Eliya, Jaffna)
+- Comprehensive destination information:
+  - Detailed descriptions and travel guides
   - Best time to visit with seasonal insights
-  - Getting there (transportation guides)
-  - Local travel tips and recommendations
+  - Transportation guides and local tips
   - Popular attractions and activities
   - Interactive maps with precise coordinates
-- High-quality destination imagery and hero sections
+  - High-quality imagery and hero sections
 
-### 🏨 **Accommodation Booking**
+### 🏨 **Accommodation Listings**
 - Search and filter properties (hotels & villas)
-- Detailed property pages featuring:
-  - Image galleries with multiple photos
-  - Comprehensive amenities list
-  - Pricing and ratings
+- Detailed property pages:
+  - Image galleries
+  - Amenities and pricing information
   - Location maps with coordinates
+  - Ratings and reviews
   - Similar property recommendations
-- Filter by location, property type, and price range
+- Advanced filtering by location, type, and price range
 
-### 🔐 **User Authentication**
-- Secure JWT-based authentication
+### 🔐 **User System**
+- Secure authentication and authorization
 - User registration and login
-- Password hashing with bcrypt
+- Personalized dashboard
 - Profile management
-- Protected dashboard routes
-
-### 📱 **Responsive Design**
-- Mobile-first approach
-- Optimized for all screen sizes
-- Touch-friendly interface
-- Fast loading times with Vite
+- Protected routes
 
 ### 🎨 **Modern UI/UX**
-- Clean and intuitive interface
-- Shadcn UI component library
-- TailwindCSS for styling
+- Clean and intuitive interface built with Shadcn UI
+- TailwindCSS for beautiful, responsive styling
 - Smooth animations and transitions
 - Loading states and error boundaries
+- Mobile-first responsive design
 
-### 🗺️ **Interactive Maps**
-- Real-time map rendering with Leaflet
-- Custom markers for destinations and properties
-- Interactive popups with location details
-- OpenStreetMap integration (no API key required)
-- Coordinate-based location display
+---
+
+## 📸 Screenshots
+
+> Add your application screenshots here to showcase the UI/UX
+
+```
+[Home Page] [Destinations] [Property Details] [Interactive Map]
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### **Frontend**
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **React** | 18.3.1 | UI library |
-| **TypeScript** | 5.8.3 | Type-safe development |
-| **Vite** | 5.4.19 | Build tool and dev server |
-| **React Router** | 6.30.1 | Client-side routing |
-| **TanStack Query** | 5.83.0 | Data fetching and caching |
-| **TailwindCSS** | 3.4.17 | Utility-first CSS |
-| **Shadcn UI** | Latest | Component library |
-| **React Leaflet** | 4.2.1 | Map integration |
-| **Leaflet** | 1.9.4 | Interactive maps |
-| **Lucide React** | 0.462.0 | Icon library |
-| **React Hook Form** | 7.61.1 | Form management |
-| **Zod** | 3.25.76 | Schema validation |
-| **Vitest** | 3.2.4 | Testing framework |
+- **React 18** - Modern UI library with hooks
+- **TypeScript** - Type-safe development
+- **Vite** - Lightning-fast build tool
+- **React Router** - Client-side routing
+- **TanStack Query** - Data fetching and caching
+- **TailwindCSS** - Utility-first CSS framework
+- **Shadcn UI** - Beautiful component library
+- **React Leaflet** - Interactive maps integration
+- **Leaflet** - Open-source mapping library
+- **React Hook Form + Zod** - Form management and validation
+- **Lucide React** - Icon library
 
 ### **Backend**
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **Node.js** | Latest | Runtime environment |
-| **Express** | 4.18.2 | Web framework |
-| **MongoDB** | Latest | NoSQL database |
-| **Mongoose** | 8.0.3 | ODM for MongoDB |
-| **JWT** | 9.0.2 | Authentication tokens |
-| **Bcrypt.js** | 2.4.3 | Password hashing |
-| **Express Validator** | 7.0.1 | Input validation |
-| **Multer** | 2.0.2 | File upload handling |
-| **CORS** | 2.8.5 | Cross-origin support |
-| **Dotenv** | 16.3.1 | Environment config |
+- **Node.js + Express** - REST API server
+- **MongoDB + Mongoose** - NoSQL database and ODM
+- **JWT** - Secure authentication tokens
+- **Bcrypt.js** - Password hashing
+- **Express Validator** - Input validation
+- **Multer** - File upload handling
+- **CORS** - Cross-origin resource sharing
 
 ### **Development Tools**
-- **ESLint** - Code linting
-- **Nodemon** - Auto-restart for backend
-- **TypeScript** - Type checking
-- **PostCSS** - CSS processing
-- **Autoprefixer** - CSS vendor prefixes
+- ESLint - Code quality
+- Vitest - Unit testing
+- Nodemon - Development auto-reload
+- PostCSS + Autoprefixer - CSS processing
 
 ---
 
@@ -237,333 +234,114 @@ CeylonWay/
 
 ---
 
-## 📋 Prerequisites
+## � Getting Started
 
-Before you begin, ensure you have the following installed:
+### Prerequisites
 
-- **Node.js** (v18.x or higher) - [Download](https://nodejs.org/)
-- **npm** (v9.x or higher) - Comes with Node.js
-- **MongoDB** (v6.x or higher) - [Download](https://www.mongodb.com/try/download/community)
-  - Local installation OR MongoDB Atlas account
-- **Git** - [Download](https://git-scm.com/)
+- Node.js (v18 or higher)
+- npm or yarn
+- MongoDB (local installation or MongoDB Atlas account)
+- Git
 
-### Verify Installation
+### Installation
 
-```bash
-node --version    # Should be v18.x or higher
-npm --version     # Should be v9.x or higher
-mongod --version  # Should be v6.x or higher (if using local MongoDB)
-```
-
----
-
-## 🚀 Installation
-
-### 1. Clone the Repository
-
+1. **Clone the repository**
 ```bash
 git clone https://github.com/yourusername/ceylonway.git
 cd ceylonway
 ```
 
-### 2. Install Backend Dependencies
-
+2. **Install backend dependencies**
 ```bash
 cd backend
 npm install
 ```
 
-### 3. Install Frontend Dependencies
-
+3. **Install frontend dependencies**
 ```bash
 cd ../frontend
 npm install --legacy-peer-deps
 ```
 
-> **Note:** The `--legacy-peer-deps` flag resolves peer dependency conflicts with react-leaflet and React 18.
+4. **Configure environment variables**
 
----
-
-## ⚙️ Configuration
-
-### Backend Configuration
-
-1. **Create Environment File**
-
-```bash
-cd backend
-cp .env.example .env
-```
-
-2. **Configure Environment Variables**
-
-Edit `.env` file:
-
+Create a `.env` file in the `backend` directory:
 ```env
-# Server Configuration
 PORT=5000
 NODE_ENV=development
-
-# Database - Choose one:
-# Local MongoDB
-MONGODB_URI=mongodb://localhost:27017/ceylonway
-
-# OR MongoDB Atlas
-# MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/ceylonway
-
-# JWT Configuration
-JWT_SECRET=your_super_secret_jwt_key_change_in_production
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRE=7d
-
-# Frontend URL (for CORS)
 FRONTEND_URL=http://localhost:8081
 ```
 
-3. **Database Setup**
-
-**Option A: Local MongoDB**
-```bash
-# Start MongoDB service
-# Windows:
-net start MongoDB
-
-# macOS:
-brew services start mongodb-community
-
-# Linux:
-sudo systemctl start mongod
-```
-
-**Option B: MongoDB Atlas**
-1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Get connection string
-4. Add to `.env` file
-
-4. **Seed Database**
-
+5. **Seed the database**
 ```bash
 cd backend
 node seeds/seed.js
 ```
 
-This will populate your database with:
-- 7 destinations (Galle, Sigiriya, Mirissa, Ella, Kandy, Nuwara Eliya, Jaffna)
-- 8 properties (hotels and villas) with real coordinates
-- Sample user data
+6. **Run the application**
 
-### Frontend Configuration
-
-The frontend uses the backend API at `http://localhost:5000` by default. This is configured in `frontend/src/lib/api.ts`.
-
-To change the API URL:
-
-```typescript
-// frontend/src/lib/api.ts
-const API_BASE_URL = 'http://localhost:5000/api';
-```
-
----
-
-## 🏃 Running the Application
-
-### Start Backend Server
-
+Backend:
 ```bash
 cd backend
 npm run dev
 ```
 
-Backend will run on **http://localhost:5000**
-
-### Start Frontend Development Server
-
+Frontend (in a new terminal):
 ```bash
 cd frontend
 npm run dev
 ```
 
-Frontend will run on **http://localhost:8081** (or the next available port)
-
-### Verify Everything Works
-
-1. **Check Backend Health:**
-   ```bash
-   curl http://localhost:5000/api/health
-   ```
-   Should return: `{"status":"OK","message":"Ceylonway API is running"}`
-
-2. **Open Frontend:**
-   Navigate to `http://localhost:8081` in your browser
-
-3. **Test Database:**
-   - Visit `/destinations` to see location listings
-   - Visit `/stays` to see property listings
-   - Click on any destination to see details with map
+7. **Access the application**
+- Frontend: `http://localhost:8081`
+- Backend API: `http://localhost:5000`
 
 ---
 
-## 📡 API Documentation
+## 📡 API Endpoints
 
-### Base URL
-```
-http://localhost:5000/api
-```
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user (protected)
 
-### Authentication Endpoints
+### Locations/Destinations
+- `GET /api/locations` - Get all destinations
+- `GET /api/locations/:id` - Get destination by ID
 
-#### Register User
-```http
-POST /auth/register
-Content-Type: application/json
+### Properties/Accommodations
+- `GET /api/properties` - Get all properties
+  - Query params: `locationId`, `type`, `priceRange`
+- `GET /api/properties/:id` - Get property by ID
 
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
+### System
+- `GET /api/health` - API health check
 
-#### Login
-```http
-POST /auth/login
-Content-Type: application/json
-
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "...",
-    "name": "John Doe",
-    "email": "john@example.com"
-  }
-}
-```
-
-#### Get Current User
-```http
-GET /auth/me
-Authorization: Bearer <token>
-```
-
-### Location/Destination Endpoints
-
-#### Get All Locations
-```http
-GET /locations
-```
-
-**Response:**
-```json
-[
-  {
-    "id": "galle",
-    "name": "Galle",
-    "country": "Sri Lanka",
-    "image": "/api/placeholder/800/600",
-    "rating": 4.8,
-    "reviewCount": 1250,
-    "propertyCount": 45,
-    "category": "coastal",
-    "lat": 6.0535,
-    "lng": 80.2210,
-    "description": "A historic coastal city...",
-    "bestTimeToVisit": "December to March",
-    "gettingThere": "...",
-    "travelTips": "...",
-    "attractions": [...],
-    "activities": [...]
-  }
-]
-```
-
-#### Get Location by ID
-```http
-GET /locations/:id
-```
-
-Example: `GET /locations/galle`
-
-### Property Endpoints
-
-#### Get All Properties
-```http
-GET /properties
-```
-
-**Query Parameters:**
-- `locationId` - Filter by location (e.g., `galle`, `sigiriya`)
-- `type` - Filter by property type (`hotel`, `villa`, or `all`)
-- `priceRange` - Filter by price range (`budget`, `mid`, `luxury`)
-
-**Example:**
-```http
-GET /properties?locationId=galle&type=hotel&priceRange=mid
-```
-
-#### Get Property by ID
-```http
-GET /properties/:id
-```
-
-**Response:**
-```json
-{
-  "id": "tamarind-hill",
-  "name": "Tamarind Hill",
-  "location": "Galle",
-  "locationId": "galle",
-  "image": "/api/placeholder/800/600",
-  "images": ["...", "...", "..."],
-  "price": 185,
-  "rating": 4.8,
-  "reviewCount": 342,
-  "type": "hotel",
-  "amenities": ["Free WiFi", "Pool", "Spa", "Restaurant"],
-  "description": "...",
-  "lat": 6.0535,
-  "lng": 80.2210
-}
-```
-
-### Health Check
-```http
-GET /health
-```
-
-Returns API status and timestamp.
+> **Note:** For detailed API documentation with request/response examples, refer to the API documentation in the codebase.
 
 ---
 
-## 🗄️ Database Schema
+## 🗄️ Database Models
 
 ### Location Model
 ```javascript
 {
-  id: String,              // Unique identifier (e.g., "galle")
-  name: String,            // Display name
-  country: String,         // Default: "Sri Lanka"
-  image: String,           // Main image URL
-  images: [String],        // Additional images
-  rating: Number,          // 0-5 rating
-  reviewCount: Number,     // Number of reviews
-  propertyCount: Number,   // Available properties
-  category: String,        // e.g., "coastal", "cultural"
+  id: String,              // Unique identifier
+  name: String,            // Destination name
+  country: String,         // Country
+  image: String,           // Main image
+  images: [String],        // Gallery images
+  rating: Number,          // Average rating (0-5)
+  category: String,        // Category (e.g., "coastal", "cultural")
   lat: Number,             // Latitude
   lng: Number,             // Longitude
   description: String,     // Overview
-  bestTimeToVisit: String, // Seasonal info
-  gettingThere: String,    // Transportation guide
-  travelTips: String,      // Local tips
+  bestTimeToVisit: String, // Best visiting season
   attractions: [String],   // Popular attractions
-  activities: [String]     // Things to do
+  activities: [String]     // Available activities
 }
 ```
 
@@ -573,15 +351,13 @@ Returns API status and timestamp.
   id: String,              // Unique identifier
   name: String,            // Property name
   location: String,        // City name
-  locationId: String,      // Reference to Location.id
-  image: String,           // Main image URL
+  locationId: String,      // Reference to Location
+  image: String,           // Main image
   images: [String],        // Gallery images
   price: Number,           // Price per night
-  rating: Number,          // 0-5 rating
-  reviewCount: Number,     // Number of reviews
+  rating: Number,          // Average rating (0-5)
   type: String,            // "hotel" or "villa"
   amenities: [String],     // Available amenities
-  description: String,     // Property description
   lat: Number,             // Latitude
   lng: Number              // Longitude
 }
@@ -591,294 +367,84 @@ Returns API status and timestamp.
 ```javascript
 {
   name: String,            // Full name
-  email: String,           // Unique email
+  email: String,           // Unique email (hashed)
   password: String,        // Hashed password
   profileImage: String,    // Profile picture URL
-  phone: String,           // Contact number
-  bio: String,             // User bio
-  dateOfBirth: Date,       // Birth date
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    country: String,
-    zipCode: String
-  },
-  role: String,            // "user" or "admin"
-  isEmailVerified: Boolean,
-  createdAt: Date,
-  updatedAt: Date
+  role: String,            // User role
+  createdAt: Date,         // Registration date
 }
-```
-
----
-
-## 🎨 Frontend Architecture
-
-### Pages
-
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/` | landing.tsx | Home page with hero and featured destinations |
-| `/destinations` | Destinations.tsx | Browse all destinations |
-| `/destinations/:id` | DestinationDetails.tsx | Detailed destination information with map |
-| `/stays` | Stays.tsx | Browse properties with filters |
-| `/stays/:id` | PropertyDetails.tsx | Property details with gallery and map |
-| `/about` | About.tsx | About the platform |
-| `/login` | Login.tsx | User login |
-| `/register` | Register.tsx | User registration |
-| `/dashboard` | Dashboard.tsx | User dashboard layout |
-| `/dashboard/profile` | Profile.tsx | User profile management |
-| `/dashboard/bookings` | MyBookings.tsx | Booking history |
-| `/dashboard/wishlist` | Wishlist.tsx | Saved destinations/properties |
-| `/dashboard/reviews` | Reviews.tsx | User reviews |
-| `/dashboard/settings` | Settings.tsx | Account settings |
-
-### Key Components
-
-#### Maps
-- **GoogleMap.tsx** - Reusable Leaflet map component with:
-  - Custom marker icons
-  - Interactive popups
-  - Coordinate display
-  - Responsive sizing
-  - Client-side mounting (prevents SSR issues)
-
-#### Cards
-- **DestinationCard.tsx** - Preview card for destinations
-- **PropertyCard.tsx** - Preview card for properties
-
-#### Layout
-- **Layout.tsx** - Main layout wrapper with navbar and footer
-- **Navbar.tsx** - Responsive navigation with mobile menu
-- **Footer.tsx** - Site footer with links
-
-#### Search
-- **SearchBar.tsx** - Search functionality for destinations and properties
-
-### State Management
-- **TanStack Query** for server state
-- **React Context** for auth state
-- **Local component state** with useState
-
-### Styling
-- **TailwindCSS** - Utility-first CSS framework
-- **Shadcn UI** - Pre-built accessible components
-- **Custom CSS** - Additional styles in index.css
-
----
-
-## 🛠️ Development
-
-### Available Scripts
-
-#### Backend
-```bash
-npm start          # Start production server
-npm run dev        # Start development server with nodemon
-```
-
-#### Frontend
-```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run ESLint
-npm test           # Run tests once
-npm run test:watch # Run tests in watch mode
-```
-
-### Code Organization Best Practices
-
-1. **Component Structure**
-   - One component per file
-   - Use TypeScript interfaces for props
-   - Keep components small and focused
-
-2. **API Calls**
-   - Centralize in `lib/api.ts`
-   - Use TanStack Query for caching
-   - Handle errors gracefully
-
-3. **Styling**
-   - Use TailwindCSS utilities first
-   - Create custom classes for repeated patterns
-   - Follow mobile-first approach
-
-4. **Type Safety**
-   - Define interfaces for all data models
-   - Use type annotations
-   - Avoid `any` type
-
-### Testing
-
-```bash
-cd frontend
-npm test
-```
-
-Tests are located in `frontend/src/test/`
-
----
-
-## 🚢 Deployment
-
-### Backend Deployment
-
-#### Prerequisites
-- MongoDB Atlas account
-- Hosting service (Heroku, DigitalOcean, Railway, etc.)
-
-#### Steps
-1. Set production environment variables
-2. Update CORS origins
-3. Deploy to hosting platform
-4. Run database migrations
-
-#### Environment Variables for Production
-```env
-NODE_ENV=production
-PORT=5000
-MONGODB_URI=mongodb+srv://...
-JWT_SECRET=<strong-secret-key>
-FRONTEND_URL=https://yourdomain.com
-```
-
-### Frontend Deployment
-
-#### Prerequisites
-- Hosting service (Vercel, Netlify, etc.)
-
-#### Steps
-
-1. **Build for Production**
-```bash
-cd frontend
-npm run build
-```
-
-2. **Update API URL**
-   - Change `API_BASE_URL` in `lib/api.ts` to production URL
-
-3. **Deploy**
-   - **Vercel:** `vercel deploy`
-   - **Netlify:** Drag `dist` folder or use CLI
-
-#### Vercel Deployment
-```bash
-npm install -g vercel
-cd frontend
-vercel
-```
-
-#### Netlify Deployment
-```bash
-npm install -g netlify-cli
-cd frontend
-npm run build
-netlify deploy --prod
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these guidelines:
+Contributions are welcome! Here's how you can help:
 
-### How to Contribute
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/AmazingFeature`)
+3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
+4. **Push to the branch** (`git push origin feature/AmazingFeature`)
+5. **Open a Pull Request**
 
-1. **Fork the Repository**
-```bash
-git clone https://github.com/yourusername/ceylonway.git
-cd ceylonway
-git checkout -b feature/your-feature-name
-```
+Please ensure your code follows the existing style and includes appropriate tests.
 
-2. **Make Changes**
-   - Follow code style guidelines
-   - Write clear commit messages
-   - Add tests for new features
-
-3. **Test Your Changes**
-```bash
-# Test backend
-cd backend
-npm start
-
-# Test frontend
-cd frontend
-npm run dev
-npm test
-```
-
-4. **Submit Pull Request**
-   - Provide clear PR description
-   - Reference related issues
-   - Wait for review
-
-### Code Style
-
-- Use ESLint for JavaScript/TypeScript
-- Follow React best practices
-- Write meaningful comments
-- Keep functions small and focused
+### Development Guidelines
+- Follow ESLint rules for code quality
+- Write meaningful commit messages
+- Update documentation for new features
+- Test your changes before submitting PR
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
-
----
-
-## 👥 Authors
-
-- **Your Name** - Initial work - [GitHub](https://github.com/yourusername)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Shadcn UI** - Beautiful component library
-- **Leaflet** - Open-source mapping library
-- **OpenStreetMap** - Free map data
-- **TailwindCSS** - Utility-first CSS framework
-- **Sri Lanka Tourism** - Destination inspiration
+- [Shadcn UI](https://ui.shadcn.com/) - Beautiful component library
+- [Leaflet](https://leafletjs.com/) - Open-source mapping library
+- [OpenStreetMap](https://www.openstreetmap.org/) - Free map data
+- [TailwindCSS](https://tailwindcss.com/) - Utility-first CSS framework
+- Sri Lanka Tourism - Destination inspiration
 
 ---
 
-## 📧 Contact & Support
+## 📧 Contact
 
-For questions, issues, or suggestions:
+**Project Link:** [https://github.com/yourusername/ceylonway](https://github.com/yourusername/ceylonway)
 
-- **Email:** support@ceylonway.com
-- **GitHub Issues:** [Create an issue](https://github.com/yourusername/ceylonway/issues)
-- **Documentation:** [Wiki](https://github.com/yourusername/ceylonway/wiki)
+For questions or suggestions, please [open an issue](https://github.com/yourusername/ceylonway/issues).
 
 ---
 
 ## 🗺️ Roadmap
 
-### Current Version (v1.0)
-- ✅ Destination browsing with detailed pages
-- ✅ Property listings and details
-- ✅ Interactive maps
-- ✅ User authentication
-- ✅ Basic dashboard
+### ✅ Implemented
+- Destination browsing with detailed information
+- Property listings and search
+- Interactive maps integration
+- User authentication system
+- Responsive design
+- Dashboard functionality
 
-### Upcoming Features
-- 🔄 Booking system
-- 🔄 Payment integration
-- 🔄 Reviews and ratings
-- 🔄 Wishlist functionality
-- 🔄 Email notifications
-- 🔄 Advanced search filters
-- 🔄 Admin dashboard
-- 🔄 Multi-language support
+### 🔄 Planned Features
+- Real booking system
+- Payment gateway integration
+- User reviews and ratings system
+- Wishlist functionality
+- Email notifications
+- Advanced search and filters
+- Admin dashboard
+- Multi-language support
+- Social media integration
 
 ---
 
 <div align="center">
   <p>Made with ❤️ for Sri Lanka</p>
-  <p><strong>Happy Traveling! 🌴</strong></p>
+  <p><strong>⭐ Star this repo if you find it useful!</strong></p>
 </div>
