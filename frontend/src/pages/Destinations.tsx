@@ -24,8 +24,16 @@ const destinationImages: Record<string, string> = {
   ella: ellaImg,
   kandy: kandyImg,
   galle: galleImg,
-  polonnaruwa: polonnaruwaImg, // Reuse similar image
-  jaffna: jaffnaImg, // Reuse similar image
+  polonnaruwa: polonnaruwaImg,
+  jaffna: jaffnaImg,
+  "nuwara-eliya": ellaImg, // Mountains similar to Ella
+  anuradhapura: polonnaruwaImg, // Ancient ruins similar to Polonnaruwa
+  yala: galleImg, // Scenic views
+  dambulla: polonnaruwaImg, // Ancient temple
+  "adams-peak": ellaImg, // Mountain peaks
+  hikkaduwa: mirissaImg, // Beach destination
+  bentota: mirissaImg, // Beach resort
+  negombo: galleImg, // Coastal town
 };
 
 const categories = [
