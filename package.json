@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm --prefix frontend run dev",
     "dev": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend run build",
+    "build": "npm --prefix frontend run build && node -e \"const fs=require('fs');fs.rmSync('dist',{recursive:true,force:true});fs.cpSync('frontend/dist','dist',{recursive:true});\"",
     "build:dev": "npm --prefix frontend run build:dev",
     "lint": "npm --prefix frontend run lint",
     "preview": "npm --prefix frontend run preview",
