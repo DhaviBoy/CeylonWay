@@ -143,14 +143,34 @@ export default function PropertyBookings() {
             <p className="text-muted-foreground">Manage your property bookings</p>
           </div>
 
+          {/* Stats Summary */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-card rounded-lg p-4">
+              <p className="text-xs text-muted-foreground mb-1">Total</p>
+              <p className="text-2xl font-bold text-foreground">{bookings.length}</p>
+            </div>
+            <div className="bg-card rounded-lg p-4">
+              <p className="text-xs text-muted-foreground mb-1">Confirmed</p>
+              <p className="text-2xl font-bold text-ocean">{bookings.filter(b => b.status === 'confirmed').length}</p>
+            </div>
+            <div className="bg-card rounded-lg p-4">
+              <p className="text-xs text-muted-foreground mb-1">Pending</p>
+              <p className="text-2xl font-bold text-golden">{bookings.filter(b => b.status === 'pending').length}</p>
+            </div>
+            <div className="bg-card rounded-lg p-4">
+              <p className="text-xs text-muted-foreground mb-1">Cancelled</p>
+              <p className="text-2xl font-bold text-muted-foreground">{bookings.filter(b => b.status === 'cancelled').length}</p>
+            </div>
+          </div>
+
           {/* Filter Tabs */}
-          <div className="flex gap-2 mb-8 flex-wrap">
+          <div className="flex gap-2 mb-6 flex-wrap">
             {["all", "confirmed", "pending", "cancelled"].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
                 className={cn(
-                  "px-4 py-2 rounded-lg font-medium transition-colors capitalize",
+                  "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize",
                   filter === status
                     ? "bg-primary text-primary-foreground"
                     : "bg-card text-muted-foreground hover:text-foreground"
@@ -161,10 +181,10 @@ export default function PropertyBookings() {
             ))}
           </div>
 
-          {/* Bookings List */}
-          <div className="space-y-4">
+          {/* Bookings List - Simplified */}
+          <div className="space-y-3">
             {filteredBookings.length === 0 ? (
-              <div className="bg-card rounded-2xl shadow-card p-12 text-center">
+              <div className="bg-card rounded-xl shadow-sm p-12 text-center">
                 <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
                 <p className="text-lg text-muted-foreground">No bookings found</p>
               </div>
@@ -172,48 +192,38 @@ export default function PropertyBookings() {
               filteredBookings.map((booking) => {
                 const StatusIcon = getStatusIcon(booking.status);
                 return (
-                  <div key={booking.id} className="bg-card rounded-2xl shadow-card p-6 hover:shadow-lg transition-shadow">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <h3 className="text-xl font-bold text-foreground">{booking.guestName}</h3>
-                            <p className="text-sm text-muted-foreground">{booking.property}</p>
-                          </div>
-                          <span className={cn("px-3 py-1 rounded-full text-xs font-medium capitalize flex items-center gap-1", getStatusColor(booking.status))}>
-                            <StatusIcon className="w-4 h-4" />
+                  <div key={booking.id} className="bg-card rounded-xl shadow-sm p-5 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-lg font-bold text-foreground">{booking.guestName}</h3>
+                          <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium capitalize flex items-center gap-1", getStatusColor(booking.status))}>
+                            <StatusIcon className="w-3 h-3" />
                             {booking.status}
                           </span>
                         </div>
-
-                        <div className="space-y-2 text-sm">
-                          <p className="text-muted-foreground">
-                            <strong className="text-foreground">Email:</strong> {booking.guestEmail}
-                          </p>
-                          <p className="text-muted-foreground">
-                            <strong className="text-foreground">Phone:</strong> {booking.guestPhone}
-                          </p>
-                        </div>
+                        <p className="text-sm text-muted-foreground">{booking.property}</p>
                       </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-secondary/50 rounded-lg p-4">
-                          <p className="text-xs text-muted-foreground uppercase mb-1">Check-in</p>
-                          <p className="text-sm font-semibold text-foreground">{booking.checkIn}</p>
-                        </div>
-                        <div className="bg-secondary/50 rounded-lg p-4">
-                          <p className="text-xs text-muted-foreground uppercase mb-1">Check-out</p>
-                          <p className="text-sm font-semibold text-foreground">{booking.checkOut}</p>
-                        </div>
-                        <div className="bg-secondary/50 rounded-lg p-4">
-                          <p className="text-xs text-muted-foreground uppercase mb-1">Nights</p>
-                          <p className="text-sm font-semibold text-foreground">{booking.nights}</p>
-                        </div>
-                        <div className="bg-secondary/50 rounded-lg p-4">
-                          <p className="text-xs text-muted-foreground uppercase mb-1">Total Price</p>
-                          <p className="text-sm font-semibold text-foreground">{booking.totalPrice}</p>
-                        </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-foreground">{booking.totalPrice}</p>
+                        <p className="text-xs text-muted-foreground">{booking.nights} nights</p>
                       </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-sm mb-3">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        <span>{booking.checkIn}</span>
+                      </div>
+                      <span className="text-muted-foreground">→</span>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <span>{booking.checkOut}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground pt-3 border-t border-border/50">
+                      <span>📧 {booking.guestEmail}</span>
+                      <span>📱 {booking.guestPhone}</span>
                     </div>
                   </div>
                 );

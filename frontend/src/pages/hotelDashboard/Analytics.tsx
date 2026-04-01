@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { BarChart3, TrendingUp, Calendar, DollarSign, Users } from "lucide-react";
+import { BarChart3, TrendingUp, Calendar, DollarSign, Users, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
@@ -22,10 +22,10 @@ const analyticsData = {
 };
 
 const monthlyData = [
-  { month: "Jan", revenue: 2400, bookings: 8, occupancy: 65 },
-  { month: "Feb", revenue: 3400, bookings: 12, occupancy: 72 },
-  { month: "Mar", revenue: 2800, bookings: 10, occupancy: 68 },
-  { month: "Apr", revenue: 3900, bookings: 14, occupancy: 85 },
+  { month: "Jan", revenue: 2400, bookings: 8 },
+  { month: "Feb", revenue: 3400, bookings: 12 },
+  { month: "Mar", revenue: 2800, bookings: 10 },
+  { month: "Apr", revenue: 3900, bookings: 14 },
 ];
 
 const propertyPerformance = [
@@ -33,14 +33,12 @@ const propertyPerformance = [
     name: "Luxury Beachfront Villa",
     revenue: "$7,200",
     bookings: 18,
-    occupancy: 82,
     rating: 4.9,
   },
   {
     name: "Mountain Boutique Hotel",
     revenue: "$5,250",
     bookings: 10,
-    occupancy: 74,
     rating: 4.7,
   },
 ];
@@ -94,152 +92,136 @@ export default function Analytics() {
             <p className="text-muted-foreground">Track your property performance and earnings</p>
           </div>
 
-          {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-card rounded-2xl shadow-card p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Total Revenue</p>
-                  <p className="text-3xl font-bold text-foreground">{analyticsData.totalRevenue}</p>
-                  <p className="text-xs text-ocean mt-2 flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
-                    {analyticsData.revenueGrowth} this month
-                  </p>
+          {/* Key Metrics - Simplified */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="bg-card rounded-xl shadow-sm p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <DollarSign className="w-5 h-5 text-primary" />
                 </div>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-primary" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Revenue</p>
+                  <p className="text-2xl font-bold text-foreground">{analyticsData.totalRevenue}</p>
                 </div>
               </div>
+              <p className="text-xs text-ocean flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                {analyticsData.revenueGrowth}
+              </p>
             </div>
 
-            <div className="bg-card rounded-2xl shadow-card p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Total Bookings</p>
-                  <p className="text-3xl font-bold text-foreground">{analyticsData.totalBookings}</p>
-                  <p className="text-xs text-ocean mt-2 flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
-                    {analyticsData.bookingsGrowth} this month
-                  </p>
+            <div className="bg-card rounded-xl shadow-sm p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-primary" />
                 </div>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-primary" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Bookings</p>
+                  <p className="text-2xl font-bold text-foreground">{analyticsData.totalBookings}</p>
                 </div>
               </div>
+              <p className="text-xs text-ocean flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                {analyticsData.bookingsGrowth}
+              </p>
             </div>
 
-            <div className="bg-card rounded-2xl shadow-card p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Occupancy Rate</p>
-                  <p className="text-3xl font-bold text-foreground">{analyticsData.occupancyRate}</p>
-                  <p className="text-xs text-ocean mt-2 flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
-                    {analyticsData.occupancyGrowth} this month
-                  </p>
+            <div className="bg-card rounded-xl shadow-sm p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-primary" />
                 </div>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-primary" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Occupancy</p>
+                  <p className="text-2xl font-bold text-foreground">{analyticsData.occupancyRate}</p>
                 </div>
               </div>
+              <p className="text-xs text-ocean flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                {analyticsData.occupancyGrowth}
+              </p>
             </div>
 
-            <div className="bg-card rounded-2xl shadow-card p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Avg Rating</p>
-                  <p className="text-3xl font-bold text-foreground">{analyticsData.averageRating}</p>
-                  <p className="text-xs text-ocean mt-2 flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3" />
-                    {analyticsData.ratingGrowth} this month
-                  </p>
+            <div className="bg-card rounded-xl shadow-sm p-5">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Star className="w-5 h-5 text-primary" />
                 </div>
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BarChart3 className="w-6 h-6 text-primary" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Avg Rating</p>
+                  <p className="text-2xl font-bold text-foreground">{analyticsData.averageRating}</p>
                 </div>
               </div>
+              <p className="text-xs text-ocean flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                {analyticsData.ratingGrowth}
+              </p>
             </div>
           </div>
 
-          {/* Monthly Trends */}
-          <div className="bg-card rounded-2xl shadow-card p-6 md:p-8 mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Monthly Trends</h2>
-            <div className="space-y-8">
+          {/* Monthly Performance - Simplified */}
+          <div className="bg-card rounded-xl shadow-sm p-6 mb-6">
+            <h2 className="text-xl font-bold text-foreground mb-6">Monthly Performance</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-4">Revenue Trend</h3>
-                <div className="flex items-end justify-around h-48 gap-4 px-4">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4">Revenue</h3>
+                <div className="flex items-end gap-3 h-40">
                   {monthlyData.map((data) => (
-                    <div key={data.month} className="flex flex-col items-center flex-1">
-                      <div
-                        className="w-full bg-gradient-coral rounded-t-lg transition-all hover:opacity-80"
-                        style={{ height: `${(data.revenue / 4000) * 100}%` }}
-                        title={`$${data.revenue}`}
-                      ></div>
-                      <p className="text-sm text-muted-foreground mt-2">{data.month}</p>
-                      <p className="text-xs font-semibold text-foreground">${data.revenue / 100}</p>
+                    <div key={data.month} className="flex-1 flex flex-col items-center">
+                      <div className="w-full bg-gradient-coral/20 rounded-t flex items-end" style={{ height: '100%' }}>
+                        <div
+                          className="w-full bg-gradient-coral rounded-t transition-all hover:opacity-80"
+                          style={{ height: `${(data.revenue / 4000) * 100}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">{data.month}</p>
+                      <p className="text-xs font-semibold text-foreground">${(data.revenue / 100).toFixed(0)}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-foreground mb-4">Bookings Trend</h3>
-                <div className="flex items-end justify-around h-48 gap-4 px-4">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4">Bookings</h3>
+                <div className="flex items-end gap-3 h-40">
                   {monthlyData.map((data) => (
-                    <div key={data.month} className="flex flex-col items-center flex-1">
-                      <div
-                        className="w-full bg-ocean rounded-t-lg transition-all hover:opacity-80"
-                        style={{ height: `${(data.bookings / 14) * 100}%` }}
-                        title={`${data.bookings} bookings`}
-                      ></div>
-                      <p className="text-sm text-muted-foreground mt-2">{data.month}</p>
+                    <div key={data.month} className="flex-1 flex flex-col items-center">
+                      <div className="w-full bg-ocean/20 rounded-t flex items-end" style={{ height: '100%' }}>
+                        <div
+                          className="w-full bg-ocean rounded-t transition-all hover:opacity-80"
+                          style={{ height: `${(data.bookings / 14) * 100}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">{data.month}</p>
                       <p className="text-xs font-semibold text-foreground">{data.bookings}</p>
                     </div>
                   ))}
                 </div>
               </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-4">Occupancy Rate Trend</h3>
-                <div className="flex items-end justify-around h-48 gap-4 px-4">
-                  {monthlyData.map((data) => (
-                    <div key={data.month} className="flex flex-col items-center flex-1">
-                      <div
-                        className="w-full bg-golden rounded-t-lg transition-all hover:opacity-80"
-                        style={{ height: `${data.occupancy}%` }}
-                        title={`${data.occupancy}%`}
-                      ></div>
-                      <p className="text-sm text-muted-foreground mt-2">{data.month}</p>
-                      <p className="text-xs font-semibold text-foreground">{data.occupancy}%</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Property Performance */}
-          <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Property Performance</h2>
-            <div className="space-y-4">
+          {/* Property Performance - Simplified */}
+          <div className="bg-card rounded-xl shadow-sm p-6">
+            <h2 className="text-xl font-bold text-foreground mb-4">Top Properties</h2>
+            <div className="space-y-3">
               {propertyPerformance.map((property, index) => (
-                <div key={index} className="p-4 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold text-foreground">{property.name}</h3>
-                    <span className="text-sm font-bold text-foreground">⭐ {property.rating}</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="text-muted-foreground mb-1">Revenue</p>
-                      <p className="font-semibold text-foreground">{property.revenue}</p>
+                <div key={index} className="p-4 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground mb-2">{property.name}</h3>
+                      <div className="flex items-center gap-4 text-sm">
+                        <span className="text-muted-foreground">
+                          <span className="font-semibold text-foreground">{property.revenue}</span> Revenue
+                        </span>
+                        <span className="text-muted-foreground">
+                          <span className="font-semibold text-foreground">{property.bookings}</span> Bookings
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-muted-foreground mb-1">Bookings</p>
-                      <p className="font-semibold text-foreground">{property.bookings}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground mb-1">Occupancy</p>
-                      <p className="font-semibold text-foreground">{property.occupancy}%</p>
+                    <div className="flex items-center gap-1 text-golden font-semibold">
+                      <Star className="w-4 h-4 fill-current" />
+                      {property.rating}
                     </div>
                   </div>
                 </div>
