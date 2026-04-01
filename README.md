@@ -289,11 +289,12 @@ cd backend
 npm run dev
 ```
 
-Frontend (in a new terminal):
+Frontend (in a new terminal, from project root):
 ```bash
-cd frontend
 npm run dev
 ```
+
+Note: The root `npm run dev` command delegates to the `frontend` app, so running it from `CeylonWay/` or from `CeylonWay/frontend` starts the same frontend codebase.
 
 7. **Access the application**
 - Frontend: `http://localhost:8081`
